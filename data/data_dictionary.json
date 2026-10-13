@@ -1,0 +1,839 @@
+[
+  {
+    "table": "Album",
+    "description": "Music albums. Each album belongs to one artist and contains many tracks.",
+    "row_count": 347,
+    "columns": [
+      {
+        "name": "AlbumId",
+        "type": "INTEGER",
+        "primary_key": true,
+        "foreign_key": null,
+        "description": "Unique album ID.",
+        "examples": [
+          "1",
+          "4",
+          "2"
+        ]
+      },
+      {
+        "name": "Title",
+        "type": "NVARCHAR(160)",
+        "primary_key": false,
+        "foreign_key": null,
+        "description": "Album title.",
+        "examples": [
+          "For Those About To Rock We Salute You",
+          "Balls to the Wall",
+          "Restless and Wild"
+        ]
+      },
+      {
+        "name": "ArtistId",
+        "type": "INTEGER",
+        "primary_key": false,
+        "foreign_key": "Artist.ArtistId",
+        "description": "The artist who made the album.",
+        "examples": [
+          "1",
+          "2",
+          "3"
+        ]
+      }
+    ]
+  },
+  {
+    "table": "Artist",
+    "description": "Music artists or bands. One artist can have many albums.",
+    "row_count": 275,
+    "columns": [
+      {
+        "name": "ArtistId",
+        "type": "INTEGER",
+        "primary_key": true,
+        "foreign_key": null,
+        "description": "Unique artist ID.",
+        "examples": [
+          "1",
+          "2",
+          "3"
+        ]
+      },
+      {
+        "name": "Name",
+        "type": "NVARCHAR(120)",
+        "primary_key": false,
+        "foreign_key": null,
+        "description": "Artist or band name.",
+        "examples": [
+          "AC/DC",
+          "Accept",
+          "Aerosmith"
+        ]
+      }
+    ]
+  },
+  {
+    "table": "Customer",
+    "description": "People who buy music from the store. Each has a country, city, email and an assigned support rep (an Employee).",
+    "row_count": 59,
+    "columns": [
+      {
+        "name": "CustomerId",
+        "type": "INTEGER",
+        "primary_key": true,
+        "foreign_key": null,
+        "description": "Unique customer ID.",
+        "examples": [
+          "1",
+          "3",
+          "12"
+        ]
+      },
+      {
+        "name": "FirstName",
+        "type": "NVARCHAR(40)",
+        "primary_key": false,
+        "foreign_key": null,
+        "description": "Customer first name.",
+        "examples": [
+          "Lu\u00eds",
+          "Leonie",
+          "Fran\u00e7ois"
+        ]
+      },
+      {
+        "name": "LastName",
+        "type": "NVARCHAR(20)",
+        "primary_key": false,
+        "foreign_key": null,
+        "description": "Customer last name.",
+        "examples": [
+          "Gon\u00e7alves",
+          "K\u00f6hler",
+          "Tremblay"
+        ]
+      },
+      {
+        "name": "Company",
+        "type": "NVARCHAR(80)",
+        "primary_key": false,
+        "foreign_key": null,
+        "description": "Customer's company (often NULL).",
+        "examples": [
+          "Embraer - Empresa Brasileira de Aeron\u00e1ut",
+          "JetBrains s.r.o.",
+          "Woodstock Discos"
+        ]
+      },
+      {
+        "name": "Address",
+        "type": "NVARCHAR(70)",
+        "primary_key": false,
+        "foreign_key": null,
+        "description": "Street address.",
+        "examples": [
+          "Av. Brigadeiro Faria Lima, 2170",
+          "Theodor-Heuss-Stra\u00dfe 34",
+          "1498 rue B\u00e9langer"
+        ]
+      },
+      {
+        "name": "City",
+        "type": "NVARCHAR(40)",
+        "primary_key": false,
+        "foreign_key": null,
+        "description": "City.",
+        "examples": [
+          "S\u00e3o Jos\u00e9 dos Campos",
+          "Stuttgart",
+          "Montr\u00e9al"
+        ]
+      },
+      {
+        "name": "State",
+        "type": "NVARCHAR(40)",
+        "primary_key": false,
+        "foreign_key": null,
+        "description": "State or province (often NULL outside the USA/Canada).",
+        "examples": [
+          "SP",
+          "QC",
+          "RJ"
+        ]
+      },
+      {
+        "name": "Country",
+        "type": "NVARCHAR(40)",
+        "primary_key": false,
+        "foreign_key": null,
+        "description": "Country name, e.g. 'USA', 'Brazil'.",
+        "examples": [
+          "Brazil",
+          "Germany",
+          "Canada"
+        ]
+      },
+      {
+        "name": "PostalCode",
+        "type": "NVARCHAR(10)",
+        "primary_key": false,
+        "foreign_key": null,
+        "description": "Postal or ZIP code.",
+        "examples": [
+          "12227-000",
+          "70174",
+          "H2G 1A7"
+        ]
+      },
+      {
+        "name": "Phone",
+        "type": "NVARCHAR(24)",
+        "primary_key": false,
+        "foreign_key": null,
+        "description": "Phone number.",
+        "examples": [
+          "+55 (12) 3923-5555",
+          "+49 0711 2842222",
+          "+1 (514) 721-4711"
+        ]
+      },
+      {
+        "name": "Fax",
+        "type": "NVARCHAR(24)",
+        "primary_key": false,
+        "foreign_key": null,
+        "description": "Fax number (often NULL).",
+        "examples": [
+          "+55 (12) 3923-5566",
+          "+420 2 4172 5555",
+          "+55 (11) 3033-4564"
+        ]
+      },
+      {
+        "name": "Email",
+        "type": "NVARCHAR(60)",
+        "primary_key": false,
+        "foreign_key": null,
+        "description": "Email address.",
+        "examples": [
+          "luisg@embraer.com.br",
+          "leonekohler@surfeu.de",
+          "ftremblay@gmail.com"
+        ]
+      },
+      {
+        "name": "SupportRepId",
+        "type": "INTEGER",
+        "primary_key": false,
+        "foreign_key": "Employee.EmployeeId",
+        "description": "The Employee who supports this customer.",
+        "examples": [
+          "3",
+          "4",
+          "5"
+        ]
+      }
+    ]
+  },
+  {
+    "table": "Employee",
+    "description": "Store staff. ReportsTo points to the employee's manager (self-reference). Support reps serve customers.",
+    "row_count": 8,
+    "columns": [
+      {
+        "name": "EmployeeId",
+        "type": "INTEGER",
+        "primary_key": true,
+        "foreign_key": null,
+        "description": "Unique employee ID.",
+        "examples": [
+          "1",
+          "2",
+          "6"
+        ]
+      },
+      {
+        "name": "LastName",
+        "type": "NVARCHAR(20)",
+        "primary_key": false,
+        "foreign_key": null,
+        "description": "Employee last name.",
+        "examples": [
+          "Adams",
+          "Edwards",
+          "Peacock"
+        ]
+      },
+      {
+        "name": "FirstName",
+        "type": "NVARCHAR(20)",
+        "primary_key": false,
+        "foreign_key": null,
+        "description": "Employee first name.",
+        "examples": [
+          "Andrew",
+          "Nancy",
+          "Jane"
+        ]
+      },
+      {
+        "name": "Title",
+        "type": "NVARCHAR(30)",
+        "primary_key": false,
+        "foreign_key": null,
+        "description": "Job title, e.g. 'Sales Support Agent', 'General Manager'.",
+        "examples": [
+          "General Manager",
+          "Sales Manager",
+          "Sales Support Agent"
+        ]
+      },
+      {
+        "name": "ReportsTo",
+        "type": "INTEGER",
+        "primary_key": false,
+        "foreign_key": "Employee.EmployeeId",
+        "description": "EmployeeId of this employee's manager (NULL for the top boss).",
+        "examples": [
+          "1",
+          "2",
+          "6"
+        ]
+      },
+      {
+        "name": "BirthDate",
+        "type": "DATETIME",
+        "primary_key": false,
+        "foreign_key": null,
+        "description": "Date of birth.",
+        "examples": [
+          "1962-02-18 00:00:00",
+          "1958-12-08 00:00:00",
+          "1973-08-29 00:00:00"
+        ]
+      },
+      {
+        "name": "HireDate",
+        "type": "DATETIME",
+        "primary_key": false,
+        "foreign_key": null,
+        "description": "Date hired.",
+        "examples": [
+          "2002-08-14 00:00:00",
+          "2002-05-01 00:00:00",
+          "2002-04-01 00:00:00"
+        ]
+      },
+      {
+        "name": "Address",
+        "type": "NVARCHAR(70)",
+        "primary_key": false,
+        "foreign_key": null,
+        "description": "Street address.",
+        "examples": [
+          "11120 Jasper Ave NW",
+          "825 8 Ave SW",
+          "1111 6 Ave SW"
+        ]
+      },
+      {
+        "name": "City",
+        "type": "NVARCHAR(40)",
+        "primary_key": false,
+        "foreign_key": null,
+        "description": "City.",
+        "examples": [
+          "Edmonton",
+          "Calgary",
+          "Lethbridge"
+        ]
+      },
+      {
+        "name": "State",
+        "type": "NVARCHAR(40)",
+        "primary_key": false,
+        "foreign_key": null,
+        "description": "State or province.",
+        "examples": [
+          "AB"
+        ]
+      },
+      {
+        "name": "Country",
+        "type": "NVARCHAR(40)",
+        "primary_key": false,
+        "foreign_key": null,
+        "description": "Country.",
+        "examples": [
+          "Canada"
+        ]
+      },
+      {
+        "name": "PostalCode",
+        "type": "NVARCHAR(10)",
+        "primary_key": false,
+        "foreign_key": null,
+        "description": "Postal code.",
+        "examples": [
+          "T5K 2N1",
+          "T2P 2T3",
+          "T2P 5M5"
+        ]
+      },
+      {
+        "name": "Phone",
+        "type": "NVARCHAR(24)",
+        "primary_key": false,
+        "foreign_key": null,
+        "description": "Phone number.",
+        "examples": [
+          "+1 (780) 428-9482",
+          "+1 (403) 262-3443",
+          "+1 (403) 263-4423"
+        ]
+      },
+      {
+        "name": "Fax",
+        "type": "NVARCHAR(24)",
+        "primary_key": false,
+        "foreign_key": null,
+        "description": "Fax number.",
+        "examples": [
+          "+1 (780) 428-3457",
+          "+1 (403) 262-3322",
+          "+1 (403) 262-6712"
+        ]
+      },
+      {
+        "name": "Email",
+        "type": "NVARCHAR(60)",
+        "primary_key": false,
+        "foreign_key": null,
+        "description": "Work email.",
+        "examples": [
+          "andrew@chinookcorp.com",
+          "nancy@chinookcorp.com",
+          "jane@chinookcorp.com"
+        ]
+      }
+    ]
+  },
+  {
+    "table": "Genre",
+    "description": "Music genres such as Rock, Jazz, Metal. Lookup table for Track.GenreId.",
+    "row_count": 25,
+    "columns": [
+      {
+        "name": "GenreId",
+        "type": "INTEGER",
+        "primary_key": true,
+        "foreign_key": null,
+        "description": "Unique genre ID.",
+        "examples": [
+          "1",
+          "2",
+          "3"
+        ]
+      },
+      {
+        "name": "Name",
+        "type": "NVARCHAR(120)",
+        "primary_key": false,
+        "foreign_key": null,
+        "description": "Genre name.",
+        "examples": [
+          "Rock",
+          "Jazz",
+          "Metal"
+        ]
+      }
+    ]
+  },
+  {
+    "table": "Invoice",
+    "description": "One purchase (order) by one customer, with date, billing location and total amount.",
+    "row_count": 412,
+    "columns": [
+      {
+        "name": "InvoiceId",
+        "type": "INTEGER",
+        "primary_key": true,
+        "foreign_key": null,
+        "description": "Unique invoice (order) ID.",
+        "examples": [
+          "98",
+          "121",
+          "143"
+        ]
+      },
+      {
+        "name": "CustomerId",
+        "type": "INTEGER",
+        "primary_key": false,
+        "foreign_key": "Customer.CustomerId",
+        "description": "The customer who made the purchase.",
+        "examples": [
+          "1",
+          "2",
+          "3"
+        ]
+      },
+      {
+        "name": "InvoiceDate",
+        "type": "DATETIME",
+        "primary_key": false,
+        "foreign_key": null,
+        "description": "Date and time of the purchase.",
+        "examples": [
+          "2021-01-01 00:00:00",
+          "2021-01-02 00:00:00",
+          "2021-01-03 00:00:00"
+        ]
+      },
+      {
+        "name": "BillingAddress",
+        "type": "NVARCHAR(70)",
+        "primary_key": false,
+        "foreign_key": null,
+        "description": "Billing street address.",
+        "examples": [
+          "Theodor-Heuss-Stra\u00dfe 34",
+          "Ullev\u00e5lsveien 14",
+          "Gr\u00e9trystraat 63"
+        ]
+      },
+      {
+        "name": "BillingCity",
+        "type": "NVARCHAR(40)",
+        "primary_key": false,
+        "foreign_key": null,
+        "description": "Billing city.",
+        "examples": [
+          "Stuttgart",
+          "Oslo",
+          "Brussels"
+        ]
+      },
+      {
+        "name": "BillingState",
+        "type": "NVARCHAR(40)",
+        "primary_key": false,
+        "foreign_key": null,
+        "description": "Billing state or province.",
+        "examples": [
+          "AB",
+          "MA",
+          "Dublin"
+        ]
+      },
+      {
+        "name": "BillingCountry",
+        "type": "NVARCHAR(40)",
+        "primary_key": false,
+        "foreign_key": null,
+        "description": "Billing country, e.g. 'USA'.",
+        "examples": [
+          "Germany",
+          "Norway",
+          "Belgium"
+        ]
+      },
+      {
+        "name": "BillingPostalCode",
+        "type": "NVARCHAR(10)",
+        "primary_key": false,
+        "foreign_key": null,
+        "description": "Billing postal code.",
+        "examples": [
+          "70174",
+          "0171",
+          "1000"
+        ]
+      },
+      {
+        "name": "Total",
+        "type": "NUMERIC(10,2)",
+        "primary_key": false,
+        "foreign_key": null,
+        "description": "Total amount of the invoice in dollars (sum of its lines).",
+        "examples": [
+          "1.98",
+          "3.96",
+          "5.94"
+        ]
+      }
+    ]
+  },
+  {
+    "table": "InvoiceLine",
+    "description": "One line item of an invoice: one track bought, with unit price and quantity. Revenue by track or genre comes from here.",
+    "row_count": 2240,
+    "columns": [
+      {
+        "name": "InvoiceLineId",
+        "type": "INTEGER",
+        "primary_key": true,
+        "foreign_key": null,
+        "description": "Unique line-item ID.",
+        "examples": [
+          "579",
+          "1",
+          "1154"
+        ]
+      },
+      {
+        "name": "InvoiceId",
+        "type": "INTEGER",
+        "primary_key": false,
+        "foreign_key": "Invoice.InvoiceId",
+        "description": "The invoice this line belongs to.",
+        "examples": [
+          "1",
+          "2",
+          "3"
+        ]
+      },
+      {
+        "name": "TrackId",
+        "type": "INTEGER",
+        "primary_key": false,
+        "foreign_key": "Track.TrackId",
+        "description": "The track that was bought.",
+        "examples": [
+          "1",
+          "2",
+          "3"
+        ]
+      },
+      {
+        "name": "UnitPrice",
+        "type": "NUMERIC(10,2)",
+        "primary_key": false,
+        "foreign_key": null,
+        "description": "Price per unit at purchase time.",
+        "examples": [
+          "0.99",
+          "1.99"
+        ]
+      },
+      {
+        "name": "Quantity",
+        "type": "INTEGER",
+        "primary_key": false,
+        "foreign_key": null,
+        "description": "Number of copies bought.",
+        "examples": [
+          "1"
+        ]
+      }
+    ]
+  },
+  {
+    "table": "MediaType",
+    "description": "File formats of tracks, such as MPEG audio file. Lookup table for Track.MediaTypeId.",
+    "row_count": 5,
+    "columns": [
+      {
+        "name": "MediaTypeId",
+        "type": "INTEGER",
+        "primary_key": true,
+        "foreign_key": null,
+        "description": "Unique media type ID.",
+        "examples": [
+          "1",
+          "2",
+          "3"
+        ]
+      },
+      {
+        "name": "Name",
+        "type": "NVARCHAR(120)",
+        "primary_key": false,
+        "foreign_key": null,
+        "description": "Media format name.",
+        "examples": [
+          "MPEG audio file",
+          "Protected AAC audio file",
+          "Protected MPEG-4 video file"
+        ]
+      }
+    ]
+  },
+  {
+    "table": "Playlist",
+    "description": "Named playlists (for example 'Music', 'Classical'). Tracks are attached via PlaylistTrack.",
+    "row_count": 18,
+    "columns": [
+      {
+        "name": "PlaylistId",
+        "type": "INTEGER",
+        "primary_key": true,
+        "foreign_key": null,
+        "description": "Unique playlist ID.",
+        "examples": [
+          "1",
+          "2",
+          "3"
+        ]
+      },
+      {
+        "name": "Name",
+        "type": "NVARCHAR(120)",
+        "primary_key": false,
+        "foreign_key": null,
+        "description": "Playlist name.",
+        "examples": [
+          "Music",
+          "Movies",
+          "TV Shows"
+        ]
+      }
+    ]
+  },
+  {
+    "table": "PlaylistTrack",
+    "description": "Bridge table linking playlists and tracks (many-to-many). Each row says track X is in playlist Y.",
+    "row_count": 8715,
+    "columns": [
+      {
+        "name": "PlaylistId",
+        "type": "INTEGER",
+        "primary_key": true,
+        "foreign_key": "Playlist.PlaylistId",
+        "description": "Playlist containing the track.",
+        "examples": [
+          "1",
+          "3",
+          "5"
+        ]
+      },
+      {
+        "name": "TrackId",
+        "type": "INTEGER",
+        "primary_key": true,
+        "foreign_key": "Track.TrackId",
+        "description": "Track inside the playlist.",
+        "examples": [
+          "1",
+          "2",
+          "3"
+        ]
+      }
+    ]
+  },
+  {
+    "table": "Track",
+    "description": "Individual songs sold in the store. Links to its album, genre and media type. The main product table.",
+    "row_count": 3503,
+    "columns": [
+      {
+        "name": "TrackId",
+        "type": "INTEGER",
+        "primary_key": true,
+        "foreign_key": null,
+        "description": "Unique track ID.",
+        "examples": [
+          "1",
+          "6",
+          "7"
+        ]
+      },
+      {
+        "name": "Name",
+        "type": "NVARCHAR(200)",
+        "primary_key": false,
+        "foreign_key": null,
+        "description": "Song title.",
+        "examples": [
+          "For Those About To Rock (We Salute You)",
+          "Balls to the Wall",
+          "Fast As a Shark"
+        ]
+      },
+      {
+        "name": "AlbumId",
+        "type": "INTEGER",
+        "primary_key": false,
+        "foreign_key": "Album.AlbumId",
+        "description": "Album the track belongs to (can be NULL).",
+        "examples": [
+          "1",
+          "2",
+          "3"
+        ]
+      },
+      {
+        "name": "MediaTypeId",
+        "type": "INTEGER",
+        "primary_key": false,
+        "foreign_key": "MediaType.MediaTypeId",
+        "description": "File format of the track.",
+        "examples": [
+          "1",
+          "2",
+          "3"
+        ]
+      },
+      {
+        "name": "GenreId",
+        "type": "INTEGER",
+        "primary_key": false,
+        "foreign_key": "Genre.GenreId",
+        "description": "Genre of the track (can be NULL).",
+        "examples": [
+          "1",
+          "2",
+          "3"
+        ]
+      },
+      {
+        "name": "Composer",
+        "type": "NVARCHAR(220)",
+        "primary_key": false,
+        "foreign_key": null,
+        "description": "Composer names, free text (often NULL).",
+        "examples": [
+          "Angus Young, Malcolm Young, Brian Johnso",
+          "U. Dirkschneider, W. Hoffmann, H. Frank,",
+          "F. Baltes, S. Kaufman, U. Dirkscneider &"
+        ]
+      },
+      {
+        "name": "Milliseconds",
+        "type": "INTEGER",
+        "primary_key": false,
+        "foreign_key": null,
+        "description": "Track length in milliseconds (divide by 1000 for seconds).",
+        "examples": [
+          "343719",
+          "342562",
+          "230619"
+        ]
+      },
+      {
+        "name": "Bytes",
+        "type": "INTEGER",
+        "primary_key": false,
+        "foreign_key": null,
+        "description": "File size in bytes.",
+        "examples": [
+          "11170334",
+          "5510424",
+          "3990994"
+        ]
+      },
+      {
+        "name": "UnitPrice",
+        "type": "NUMERIC(10,2)",
+        "primary_key": false,
+        "foreign_key": null,
+        "description": "Price of one copy of the track in dollars.",
+        "examples": [
+          "0.99",
+          "1.99"
+        ]
+      }
+    ]
+  }
+]
