@@ -4,4 +4,4 @@ __pycache__/
 .env
 .pytest_cache/
 chroma_db/
-llm_cache.sqlite
+llm_cache.sqlitemodels_cache/
