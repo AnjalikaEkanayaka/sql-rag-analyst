@@ -16,7 +16,25 @@
 ## Open problems
 - none
 
-## Next: Day 2 - chunk, embed, index dictionary; retrieve(question, k)
+## Day 2 - DONE
+- src/retrieval.py: 28 chunks (11 table overviews + 17 column groups of up to 5 columns), each chunk prefixed with table name + description
+- Embeddings: fastembed BAAI/bge-small-en-v1.5 (384 dims), model cached in models_cache/
+- Index: ChromaDB persistent in chroma_db/ (both git-ignored); retrieve(question, k) = best chunk per table, top-k tables by distance
+- scripts/check_retrieval.py: 10-question hand check
+
+## Day 2 metrics (hand check only, NOT a rigorous result)
+- mean table recall@4 = 0.97 on 10 hand-written questions (expected tables written by me)
+- Only miss: "best-selling artist" (missed InvoiceLine, a join-bridge table)
+
+## Open problems
+- n_chunks=10 can collapse to fewer than k tables (some queries return 3 tables for k=4) -> test on Day 6
+- Join-bridge tables are hard for embedding-only retrieval -> Day 6 hybrid/rerank experiments
+- Need the 40-question eval for real numbers (Day 5)
+
+## Next: Day 3 - llm.py (provider interface, caching, retry) and pipeline.py
+
+## CV-ready facts
+- RAG over a schema dictionary: 28 chunks, bge-small ONNX embeddings, ChromaDB; finding: embedding-only retrieval misses join-bridge tables
 
 ## CV-ready facts
 - SQLite/Chinook: 11 tables, 64 columns documented in a hybrid auto + manual data dictionary
