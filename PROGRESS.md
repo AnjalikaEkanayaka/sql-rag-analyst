@@ -31,10 +31,25 @@
 - Join-bridge tables are hard for embedding-only retrieval -> Day 6 hybrid/rerank experiments
 - Need the 40-question eval for real numbers (Day 5)
 
-## Next: Day 3 - llm.py (provider interface, caching, retry) and pipeline.py
+## Day 3 - DONE
+- src/llm.py: LLMProvider interface, GroqProvider (default model openai/gpt-oss-20b, temperature 0), CachedLLM (SQLite disk cache keyed by sha256 of provider+model+prompts), retry with retry-after / exponential backoff + jitter (retries only 429, 5xx, network errors)
+- src/pipeline.py: ask(question, k=4, explain=True): retrieve -> lean schema text (no examples) -> LLM SQL -> read-only execute (50-row cap) -> explanation
+- Execute step is minimal and unguarded; Day 4 replaces it with sql_guard.py
+- Groq free limits (read from docs, Oct 2026; verify on console limits page): 30 RPM, 1K RPD, 8K TPM, 200K TPD for text models. Plan eval runs around TPD; explain=False in eval
 
-## CV-ready facts
-- RAG over a schema dictionary: 28 chunks, bge-small ONNX embeddings, ChromaDB; finding: embedding-only retrieval misses join-bridge tables
+## Day 3 metrics (manual check, not rigorous)
+- 5/5 questions plausible and verified by eye; bonus "best-selling artist" failed
+
+## Open problems
+- Silent failure: model returned SELECT * FROM Artist LIMIT 0 when needed table (InvoiceLine) was not retrieved -> Day 6 retrieval fix; Day 7 try CANNOT_ANSWER option
+- Explanation can over-claim from first 10 rows: fixed with rows_fetched/rows_shown in prompt (verify)
+- n_chunks=10 can collapse below k tables (Day 6)
+
+## Next: Day 4 - sql_guard.py + attack tests
+
 
 ## CV-ready facts
 - SQLite/Chinook: 11 tables, 64 columns documented in a hybrid auto + manual data dictionary
+- RAG over a schema dictionary: 28 chunks, bge-small ONNX embeddings, ChromaDB; finding: embedding-only retrieval misses join-bridge tables
+- LLM layer with provider interface, disk cache and rate-limit-aware retry, built around a free tier of 200K tokens/day
+- Finding: “executes without error” is not “correct”, which motivates execution-accuracy evaluation
