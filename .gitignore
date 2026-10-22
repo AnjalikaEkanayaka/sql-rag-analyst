@@ -5,3 +5,4 @@ __pycache__/
 .pytest_cache/
 chroma_db/
 llm_cache.sqlitemodels_cache/
+logs/

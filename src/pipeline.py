@@ -1,16 +1,14 @@
 """Question -> retrieve schema -> LLM writes SQL -> execute -> explain."""
 import json
 import re
-import sqlite3
 from functools import lru_cache
 from pathlib import Path
 
 from src.llm import get_llm
 from src.retrieval import retrieve
+from src.sql_guard import run_query
 
-DB_URI = "file:data/chinook.db?mode=ro"  # read-only
 DICT_PATH = Path("data/data_dictionary.json")
-MAX_ROWS = 50
 
 SQL_SYSTEM = """You are an expert SQLite analyst. Write ONE read-only SQLite SELECT query that answers the question, using ONLY the tables and columns in <schema>.
 Rules:
@@ -53,17 +51,6 @@ def clean_sql(text):
     return (m.group(1) if m else text).strip()
 
 
-def execute_sql(sql, max_rows=MAX_ROWS):
-    con = sqlite3.connect(DB_URI, uri=True)
-    try:
-        cur = con.execute(sql)
-        columns = [d[0] for d in cur.description] if cur.description else []
-        rows = [list(r) for r in cur.fetchmany(max_rows)]
-        return columns, rows
-    finally:
-        con.close()
-
-
 def ask(question, k=4, explain=True):
     llm = get_llm()
     result = {"question": question, "tables": [], "sql": None, "columns": [],
@@ -73,7 +60,9 @@ def ask(question, k=4, explain=True):
               f"<question>\n{question}\n</question>")
     try:
         result["sql"] = clean_sql(llm.complete(SQL_SYSTEM, prompt))
-        result["columns"], result["rows"] = execute_sql(result["sql"])
+        out = run_query(result["sql"])
+        result["sql"] = out["sql"]  # the validated SQL that actually ran
+        result["columns"], result["rows"] = out["columns"], out["rows"]
     except Exception as e:
         result["error"] = f"{type(e).__name__}: {e}"
         return result
