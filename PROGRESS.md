@@ -45,7 +45,26 @@
 - Explanation can over-claim from first 10 rows: fixed with rows_fetched/rows_shown in prompt (verify)
 - n_chunks=10 can collapse below k tables (Day 6)
 
-## Next: Day 4 - sql_guard.py + attack tests
+## Day 4 - DONE
+- src/sql_guard.py: validate_sql (sqlglot parse; exactly one statement; root must be SELECT/UNION/INTERSECT/EXCEPT; forbidden nodes scan; blocked functions load_extension/readfile/writefile/edit/fts3_tokenizer/zeroblob/randomblob; table allowlist from data dictionary incl. CTE names; no schema-qualified or table-valued functions; LIMIT enforced at 50, set operations wrapped), run_query (read-only URI + PRAGMA query_only, 5s progress-handler timeout, 50-row cap + truncated flag, JSONL log of every query to logs/queries.jsonl)
+- Execute the regenerated SQL (comments stripped), not the original string
+- pipeline.py now calls run_query; errors surface as GuardError/QueryError in result["error"]
+- tests/test_sql_guard.py: 54 tests (30 attack cases, normal queries, limit/timeout/row cap, read-only DB without guard, logging)
+
+## Day 4 metrics
+- pytest: 54 passed
+
+## Known limits of the guard (for README)
+- Checks safety, not correctness (silent wrong-but-valid SQL passes)
+- Expensive allowed queries are stopped only by the 5s timeout; LIMIT enforced on the outer query only
+- No per-user permissions; all known tables readable
+- Result rows are shown to the explanation LLM, so DB contents could attempt prompt injection (low impact: explainer cannot execute anything)
+
+## Open problems (carried over)
+- Silent LIMIT 0 failure when InvoiceLine not retrieved (Day 6 / Day 7)
+- n_chunks=10 can return fewer than k tables (Day 6)
+
+## Next: Day 5 - 40-question eval set, run_eval.py, baseline numbers
 
 
 ## CV-ready facts
