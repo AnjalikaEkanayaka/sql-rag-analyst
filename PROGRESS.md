@@ -64,7 +64,25 @@
 - Silent LIMIT 0 failure when InvoiceLine not retrieved (Day 6 / Day 7)
 - n_chunks=10 can return fewer than k tables (Day 6)
 
-## Next: Day 5 - 40-question eval set, run_eval.py, baseline numbers
+## Day 5 - DONE
+- data/eval/questions.json: 40 questions (15 easy, 15 medium, 10 hard) with gold SQL verified by execution against Chinook; ties at top-N boundaries removed (#30, #40 reworded); difficulty = author judgment (easy=single table, medium=joins/aggregates, hard=4+ tables or subquery)
+- eval/run_eval.py: table recall@k, hit-all@k, MRR (gold tables derived from gold SQL via sqlglot); execution accuracy = result-set equality (order-insensitive, numbers rounded to 2dp, numeric strings treated as numbers, extra/missing columns = wrong); stops on LLM failure; per-question results saved to eval/runs/<name>.json; rows appended to eval/results.md; --retrieval-only flag (no LLM), --limit smoke mode
+- Eval queries logged separately in logs/eval_queries.jsonl
+
+## Baseline (k=4, dense retrieval, schema-only prompt, explain off, Groq openai/gpt-oss-20b)
+- Recall@4 0.962 | Hit-all@4 0.900 | MRR 0.988 | Exec acc 97.5% (39/40) | Easy 100% | Medium 100% | Hard 90%
+- Only failure: #39 (playlists with AC/DC tracks): Album/Artist not retrieved, model used Track.Composer LIKE '%AC/DC%'
+
+## Findings / caveats
+- Near ceiling: little headroom for experiments to show gains
+- Suspected contamination: LLM likely knows Chinook; 3 of 4 questions with recall<1 still answered correctly (guard allows any known table, not only retrieved ones) -> RAG contribution is under-measured
+- One question = 2.5 points; differences of 1-2 questions are noise
+
+## Planned for Day 6 (controls + experiments)
+- Retrieval-only (free): k in {2,3,4,5,6}, n_chunks, BM25 hybrid, simple reranking; judge by hit-all@k
+- Control: no schema in prompt; strict mode: guard allows only retrieved tables; low-k end-to-end runs
+
+## Next: Day 6 - retrieval experiments
 
 
 ## CV-ready facts
