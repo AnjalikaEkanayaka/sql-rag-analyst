@@ -94,7 +94,17 @@ def main():
     ap.add_argument("--retrieval-only", action="store_true", help="no LLM calls")
     ap.add_argument("--limit", type=int, help="only the first N questions (not recorded)")
     ap.add_argument("--notes", default="")
+    ap.add_argument("--mode", default="dense", choices=["dense", "bm25", "hybrid"])
+    ap.add_argument("--n-chunks", type=int, default=10)
+    ap.add_argument("--fk-expand", action="store_true")
+    ap.add_argument("--fk-boost", type=float, default=0.8)
+    ap.add_argument("--quiet", action="store_true")
     args = ap.parse_args()
+
+    opts = dict(mode=args.mode, n_chunks=args.n_chunks,
+                fk_expand=args.fk_expand, fk_boost=args.fk_boost)
+    notes = args.notes or (f"{args.mode}, n_chunks={args.n_chunks}"
+                           + (f", fk-expand boost={args.fk_boost}" if args.fk_expand else ""))
 
     sql_guard.LOG_PATH = Path("logs/eval_queries.jsonl")  # keep eval out of the main audit log
     questions = json.loads(QUESTIONS.read_text(encoding="utf-8"))
@@ -110,7 +120,7 @@ def main():
                "gold_tables": sorted(gold_tables(q["gold_sql"])), "sql": None, "status": None,
                "error": None}
         if args.retrieval_only:
-            got = [r["table"] for r in retrieve(q["question"], k=args.k)]
+            got = [r["table"] for r in retrieve(q["question"], k=args.k, **opts)]
         else:
             out = ask(q["question"], k=args.k, explain=False)
             got = out["tables"]
@@ -122,8 +132,9 @@ def main():
         rec["got_tables"] = got
         rec["recall"], rec["rr"] = retrieval_metrics(rec["gold_tables"], got)
         records.append(rec)
-        print(f"#{q['id']:>2} {q['difficulty']:<6} recall={rec['recall']:.2f} {rec['status'] or ''}")
-
+        if not args.quiet:
+            print(f"#{q['id']:>2} {q['difficulty']:<6} recall={rec['recall']:.2f} {rec['status'] or ''}")
+        
     s = summarize(records, args.k, args.retrieval_only)
     print("\n" + json.dumps(s, indent=1))
 
@@ -137,7 +148,7 @@ def main():
     pct = lambda x: f"{100 * x:.1f}%"
     acc = ["-"] * 4 if args.retrieval_only else [pct(s[x]) for x in ("exec_acc", "easy", "medium", "hard")]
     row = (f"| {args.name} | {args.k} | {s['n']} | {s['recall']:.3f} | {s['hit_all']:.3f} | "
-           f"{s['mrr']:.3f} | {' | '.join(acc)} | {args.notes} |\n")
+           f"{s['mrr']:.3f} | {' | '.join(acc)} | {notes} |\n")
     new_file = not RESULTS_MD.exists() or RESULTS_MD.stat().st_size == 0
     with RESULTS_MD.open("a", encoding="utf-8") as f:
         if new_file:
