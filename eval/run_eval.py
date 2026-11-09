@@ -99,12 +99,22 @@ def main():
     ap.add_argument("--fk-expand", action="store_true")
     ap.add_argument("--fk-boost", type=float, default=0.8)
     ap.add_argument("--quiet", action="store_true")
+    ap.add_argument("--schema", default="lean", choices=["lean", "none"])
+    ap.add_argument("--no-fk-hints", action="store_true")
+    ap.add_argument("--strict", action="store_true")
     args = ap.parse_args()
 
     opts = dict(mode=args.mode, n_chunks=args.n_chunks,
                 fk_expand=args.fk_expand, fk_boost=args.fk_boost)
     notes = args.notes or (f"{args.mode}, n_chunks={args.n_chunks}"
                            + (f", fk-expand boost={args.fk_boost}" if args.fk_expand else ""))
+
+    if args.schema == "none":
+        notes += ", NO schema"
+    if args.no_fk_hints:
+        notes += ", no FK hints"
+    if args.strict:
+        notes += ", strict tables"
 
     sql_guard.LOG_PATH = Path("logs/eval_queries.jsonl")  # keep eval out of the main audit log
     questions = json.loads(QUESTIONS.read_text(encoding="utf-8"))
@@ -122,9 +132,11 @@ def main():
         if args.retrieval_only:
             got = [r["table"] for r in retrieve(q["question"], k=args.k, **opts)]
         else:
-            out = ask(q["question"], k=args.k, explain=False)
+            out = ask(q["question"], k=args.k, explain=False, schema=args.schema,
+                      fk_hints=not args.no_fk_hints, strict=args.strict)
             got = out["tables"]
-            rec.update(sql=out["sql"], error=out["error"], status=classify(out, gold_norm))
+            rec.update(sql=out["sql"], error=out["error"], status=classify(out, gold_norm),
+                       prompt_chars=out["prompt_chars"])
             if rec["status"] == "llm_error":
                 raise SystemExit(f"\nLLM failure on #{q['id']}: {out['error']}\n"
                                  "Stopping so the numbers are not polluted. Answers so far are cached, "
@@ -136,6 +148,9 @@ def main():
             print(f"#{q['id']:>2} {q['difficulty']:<6} recall={rec['recall']:.2f} {rec['status'] or ''}")
         
     s = summarize(records, args.k, args.retrieval_only)
+    if not args.retrieval_only:
+        s["avg_prompt_chars"] = round(mean(r["prompt_chars"] for r in records))
+        notes += f", ~{s['avg_prompt_chars']} prompt chars"
     print("\n" + json.dumps(s, indent=1))
 
     RUNS_DIR.mkdir(parents=True, exist_ok=True)
@@ -147,8 +162,9 @@ def main():
         return
     pct = lambda x: f"{100 * x:.1f}%"
     acc = ["-"] * 4 if args.retrieval_only else [pct(s[x]) for x in ("exec_acc", "easy", "medium", "hard")]
-    row = (f"| {args.name} | {args.k} | {s['n']} | {s['recall']:.3f} | {s['hit_all']:.3f} | "
-           f"{s['mrr']:.3f} | {' | '.join(acc)} | {notes} |\n")
+    ret = ["-"] * 3 if args.schema == "none" else [f"{s['recall']:.3f}", f"{s['hit_all']:.3f}", f"{s['mrr']:.3f}"]
+    row = (f"| {args.name} | {args.k} | {s['n']} | {' | '.join(ret)} | "
+           f"{' | '.join(acc)} | {notes} |\n")
     new_file = not RESULTS_MD.exists() or RESULTS_MD.stat().st_size == 0
     with RESULTS_MD.open("a", encoding="utf-8") as f:
         if new_file:

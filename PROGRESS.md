@@ -77,12 +77,17 @@
 - Near ceiling: little headroom for experiments to show gains
 - Suspected contamination: LLM likely knows Chinook; 3 of 4 questions with recall<1 still answered correctly (guard allows any known table, not only retrieved ones) -> RAG contribution is under-measured
 - One question = 2.5 points; differences of 1-2 questions are noise
+- Evidence of schema leakage/contamination: for the 4 questions with recall<1 (#24, #36, #39, #40), the 3 correct answers used tables absent from the prompt (Artist; Invoice, Genre); the only failure (#39) stayed inside retrieved tables. Causes to separate on Day 6: (1) LLM knows Chinook, (2) FK REFERENCES lines in schema text name neighbouring tables
 
 ## Planned for Day 6 (controls + experiments)
 - Retrieval-only (free): k in {2,3,4,5,6}, n_chunks, BM25 hybrid, simple reranking; judge by hit-all@k
 - Control: no schema in prompt; strict mode: guard allows only retrieved tables; low-k end-to-end runs
 
-## Next: Day 6 - retrieval experiments
+## Day 6 (part 1) - DONE: retrieval-only experiments (no LLM calls), 40 questions
+- src/retrieval.py: retrieve(question, k, n_chunks, mode=dense|bm25|hybrid, fk_expand, fk_boost); hybrid = Reciprocal Rank Fusion (c=60) of dense + BM25 (rank_bm25, camelCase split, crude plural strip); FK rerank = neighbours of top-2 tables get parent_score * boost
+- Results (hit-all@k / recall@k): dense k1 .425/.650, k2 .675/.834, k3 .825/.929, k4 .900/.962, k5 .925/.980, k6 .975/.990; dense n_chunks=28 k4 = same as 10; BM25 k4 .750/.884 (MRR .821); hybrid k4 .900/.967 (MRR .963); dense+FK0.8 k4 unchanged; hybrid+n28+FK0.95 k4 .925/.970 (+1 question, within noise)
+- Conclusion: plain dense is as good as any variant; k is the main lever (accuracy vs prompt size). 7 variants tried on the same 40 questions, so the +1 is post-hoc and not claimed
+- Limitation: 11-table schema; k=6 covers over half of it, so retrieval benefits at scale are not demonstrated
 
 
 ## CV-ready facts

@@ -109,11 +109,11 @@ def _log(sql, status, reason=None, rows=None, ms=None):
         f.write(json.dumps(entry, ensure_ascii=False) + "\n")
 
 
-def run_query(sql, max_rows=MAX_ROWS):
+def run_query(sql, max_rows=MAX_ROWS, tables=None):
     """Validate then execute. Returns dict(sql, columns, rows, truncated)."""
     start = time.time()
     try:
-        safe_sql = validate_sql(sql, max_rows=max_rows)
+        safe_sql = validate_sql(sql, tables=tables, max_rows=max_rows)
     except GuardError as e:
         _log(sql, "blocked", reason=str(e))
         raise

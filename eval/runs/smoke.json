@@ -1,6 +1,6 @@
 {
  "summary": {
-  "n": 5,
+  "n": 3,
   "k": 4,
   "recall": 1.0,
   "hit_all": 1.0,
@@ -10,8 +10,9 @@
   "medium": 0.0,
   "hard": 0.0,
   "status_counts": {
-   "correct": 5
-  }
+   "correct": 3
+  },
+  "avg_prompt_chars": 1683
  },
  "records": [
   {
@@ -24,6 +25,7 @@
    "sql": "SELECT COUNT(*) AS customer_count FROM Customer LIMIT 50",
    "status": "correct",
    "error": null,
+   "prompt_chars": 2200,
    "got_tables": [
     "Customer",
     "Employee",
@@ -43,6 +45,7 @@
    "sql": "SELECT COUNT(*) FROM Track LIMIT 50",
    "status": "correct",
    "error": null,
+   "prompt_chars": 1498,
    "got_tables": [
     "Track",
     "PlaylistTrack",
@@ -62,48 +65,12 @@
    "sql": "SELECT Name FROM Genre LIMIT 50",
    "status": "correct",
    "error": null,
+   "prompt_chars": 1350,
    "got_tables": [
     "Genre",
     "Playlist",
     "Track",
     "Artist"
-   ],
-   "recall": 1.0,
-   "rr": 1.0
-  },
-  {
-   "id": 4,
-   "difficulty": "easy",
-   "question": "What are the first and last names of the customers from Brazil?",
-   "gold_tables": [
-    "Customer"
-   ],
-   "sql": "SELECT FirstName, LastName FROM Customer WHERE Country = 'Brazil' LIMIT 50",
-   "status": "correct",
-   "error": null,
-   "got_tables": [
-    "Customer",
-    "Employee",
-    "Invoice"
-   ],
-   "recall": 1.0,
-   "rr": 1.0
-  },
-  {
-   "id": 5,
-   "difficulty": "easy",
-   "question": "Show the names and lengths in milliseconds of the 5 longest tracks.",
-   "gold_tables": [
-    "Track"
-   ],
-   "sql": "SELECT Name, Milliseconds FROM Track ORDER BY Milliseconds DESC LIMIT 5",
-   "status": "correct",
-   "error": null,
-   "got_tables": [
-    "Track",
-    "Playlist",
-    "PlaylistTrack",
-    "Genre"
    ],
    "recall": 1.0,
    "rr": 1.0

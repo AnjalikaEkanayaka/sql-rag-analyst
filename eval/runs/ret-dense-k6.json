@@ -1,0 +1,844 @@
+{
+ "summary": {
+  "n": 40,
+  "k": 6,
+  "recall": 0.99,
+  "hit_all": 0.975,
+  "mrr": 0.9875
+ },
+ "records": [
+  {
+   "id": 1,
+   "difficulty": "easy",
+   "question": "How many customers are there?",
+   "gold_tables": [
+    "Customer"
+   ],
+   "sql": null,
+   "status": null,
+   "error": null,
+   "got_tables": [
+    "Customer",
+    "Employee",
+    "Invoice",
+    "InvoiceLine",
+    "Artist"
+   ],
+   "recall": 1.0,
+   "rr": 1.0
+  },
+  {
+   "id": 2,
+   "difficulty": "easy",
+   "question": "How many tracks are there in total?",
+   "gold_tables": [
+    "Track"
+   ],
+   "sql": null,
+   "status": null,
+   "error": null,
+   "got_tables": [
+    "Track",
+    "PlaylistTrack",
+    "Album",
+    "Genre",
+    "Playlist",
+    "InvoiceLine"
+   ],
+   "recall": 1.0,
+   "rr": 1.0
+  },
+  {
+   "id": 3,
+   "difficulty": "easy",
+   "question": "List the names of all genres.",
+   "gold_tables": [
+    "Genre"
+   ],
+   "sql": null,
+   "status": null,
+   "error": null,
+   "got_tables": [
+    "Genre",
+    "Playlist",
+    "Track",
+    "Artist",
+    "Album"
+   ],
+   "recall": 1.0,
+   "rr": 1.0
+  },
+  {
+   "id": 4,
+   "difficulty": "easy",
+   "question": "What are the first and last names of the customers from Brazil?",
+   "gold_tables": [
+    "Customer"
+   ],
+   "sql": null,
+   "status": null,
+   "error": null,
+   "got_tables": [
+    "Customer",
+    "Employee",
+    "Invoice"
+   ],
+   "recall": 1.0,
+   "rr": 1.0
+  },
+  {
+   "id": 5,
+   "difficulty": "easy",
+   "question": "Show the names and lengths in milliseconds of the 5 longest tracks.",
+   "gold_tables": [
+    "Track"
+   ],
+   "sql": null,
+   "status": null,
+   "error": null,
+   "got_tables": [
+    "Track",
+    "Playlist",
+    "PlaylistTrack",
+    "Genre",
+    "Album",
+    "MediaType"
+   ],
+   "recall": 1.0,
+   "rr": 1.0
+  },
+  {
+   "id": 6,
+   "difficulty": "easy",
+   "question": "How many invoices were issued in 2023?",
+   "gold_tables": [
+    "Invoice"
+   ],
+   "sql": null,
+   "status": null,
+   "error": null,
+   "got_tables": [
+    "Invoice",
+    "InvoiceLine",
+    "Employee",
+    "Customer"
+   ],
+   "recall": 1.0,
+   "rr": 1.0
+  },
+  {
+   "id": 7,
+   "difficulty": "easy",
+   "question": "What is the average invoice total, rounded to 2 decimal places?",
+   "gold_tables": [
+    "Invoice"
+   ],
+   "sql": null,
+   "status": null,
+   "error": null,
+   "got_tables": [
+    "Invoice",
+    "InvoiceLine",
+    "Customer",
+    "Employee",
+    "Track"
+   ],
+   "recall": 1.0,
+   "rr": 1.0
+  },
+  {
+   "id": 8,
+   "difficulty": "easy",
+   "question": "What are the first and last names of the employees whose title is 'Sales Support Agent'?",
+   "gold_tables": [
+    "Employee"
+   ],
+   "sql": null,
+   "status": null,
+   "error": null,
+   "got_tables": [
+    "Employee",
+    "Customer",
+    "Invoice",
+    "InvoiceLine"
+   ],
+   "recall": 1.0,
+   "rr": 1.0
+  },
+  {
+   "id": 9,
+   "difficulty": "easy",
+   "question": "How many different countries do the customers come from?",
+   "gold_tables": [
+    "Customer"
+   ],
+   "sql": null,
+   "status": null,
+   "error": null,
+   "got_tables": [
+    "Customer",
+    "Employee",
+    "Invoice",
+    "InvoiceLine"
+   ],
+   "recall": 1.0,
+   "rr": 1.0
+  },
+  {
+   "id": 10,
+   "difficulty": "easy",
+   "question": "List the names of all media types.",
+   "gold_tables": [
+    "MediaType"
+   ],
+   "sql": null,
+   "status": null,
+   "error": null,
+   "got_tables": [
+    "MediaType",
+    "Genre",
+    "Playlist",
+    "Track",
+    "Album",
+    "Artist"
+   ],
+   "recall": 1.0,
+   "rr": 1.0
+  },
+  {
+   "id": 11,
+   "difficulty": "easy",
+   "question": "How many albums are there?",
+   "gold_tables": [
+    "Album"
+   ],
+   "sql": null,
+   "status": null,
+   "error": null,
+   "got_tables": [
+    "Album",
+    "Artist",
+    "PlaylistTrack",
+    "Playlist",
+    "Genre",
+    "Track"
+   ],
+   "recall": 1.0,
+   "rr": 1.0
+  },
+  {
+   "id": 12,
+   "difficulty": "easy",
+   "question": "How many tracks cost more than 0.99?",
+   "gold_tables": [
+    "Track"
+   ],
+   "sql": null,
+   "status": null,
+   "error": null,
+   "got_tables": [
+    "Track",
+    "InvoiceLine",
+    "PlaylistTrack",
+    "Album",
+    "Genre",
+    "Playlist"
+   ],
+   "recall": 1.0,
+   "rr": 1.0
+  },
+  {
+   "id": 13,
+   "difficulty": "easy",
+   "question": "What is the largest invoice total?",
+   "gold_tables": [
+    "Invoice"
+   ],
+   "sql": null,
+   "status": null,
+   "error": null,
+   "got_tables": [
+    "Invoice",
+    "InvoiceLine",
+    "Employee",
+    "Customer"
+   ],
+   "recall": 1.0,
+   "rr": 1.0
+  },
+  {
+   "id": 14,
+   "difficulty": "easy",
+   "question": "How many customers have no company listed?",
+   "gold_tables": [
+    "Customer"
+   ],
+   "sql": null,
+   "status": null,
+   "error": null,
+   "got_tables": [
+    "Customer",
+    "Employee",
+    "Invoice"
+   ],
+   "recall": 1.0,
+   "rr": 1.0
+  },
+  {
+   "id": 15,
+   "difficulty": "easy",
+   "question": "What is the earliest hire date among the employees?",
+   "gold_tables": [
+    "Employee"
+   ],
+   "sql": null,
+   "status": null,
+   "error": null,
+   "got_tables": [
+    "Employee",
+    "Invoice",
+    "Customer"
+   ],
+   "recall": 1.0,
+   "rr": 1.0
+  },
+  {
+   "id": 16,
+   "difficulty": "medium",
+   "question": "What are the titles of all albums by AC/DC?",
+   "gold_tables": [
+    "Album",
+    "Artist"
+   ],
+   "sql": null,
+   "status": null,
+   "error": null,
+   "got_tables": [
+    "Album",
+    "Artist",
+    "Genre",
+    "Track",
+    "Playlist"
+   ],
+   "recall": 1.0,
+   "rr": 1.0
+  },
+  {
+   "id": 17,
+   "difficulty": "medium",
+   "question": "How many tracks does each genre have? Show the genre name and the track count.",
+   "gold_tables": [
+    "Genre",
+    "Track"
+   ],
+   "sql": null,
+   "status": null,
+   "error": null,
+   "got_tables": [
+    "Genre",
+    "Track",
+    "Playlist",
+    "PlaylistTrack",
+    "Album"
+   ],
+   "recall": 1.0,
+   "rr": 1.0
+  },
+  {
+   "id": 18,
+   "difficulty": "medium",
+   "question": "Who are the top 5 customers by total spending? Show first name, last name and total spent.",
+   "gold_tables": [
+    "Customer",
+    "Invoice"
+   ],
+   "sql": null,
+   "status": null,
+   "error": null,
+   "got_tables": [
+    "Customer",
+    "Employee",
+    "Invoice"
+   ],
+   "recall": 1.0,
+   "rr": 1.0
+  },
+  {
+   "id": 19,
+   "difficulty": "medium",
+   "question": "What is the total revenue for each year? Show the year and the revenue.",
+   "gold_tables": [
+    "Invoice"
+   ],
+   "sql": null,
+   "status": null,
+   "error": null,
+   "got_tables": [
+    "InvoiceLine",
+    "Invoice",
+    "Customer",
+    "Track",
+    "Employee",
+    "Album"
+   ],
+   "recall": 1.0,
+   "rr": 0.5
+  },
+  {
+   "id": 20,
+   "difficulty": "medium",
+   "question": "How many customers does each support representative have? Show the representative's first name, last name and the number of customers.",
+   "gold_tables": [
+    "Customer",
+    "Employee"
+   ],
+   "sql": null,
+   "status": null,
+   "error": null,
+   "got_tables": [
+    "Customer",
+    "Employee",
+    "Invoice"
+   ],
+   "recall": 1.0,
+   "rr": 1.0
+  },
+  {
+   "id": 21,
+   "difficulty": "medium",
+   "question": "Which 5 artists have the most albums? Show the artist name and the number of albums.",
+   "gold_tables": [
+    "Album",
+    "Artist"
+   ],
+   "sql": null,
+   "status": null,
+   "error": null,
+   "got_tables": [
+    "Artist",
+    "Album",
+    "Genre",
+    "Playlist",
+    "PlaylistTrack",
+    "Track"
+   ],
+   "recall": 1.0,
+   "rr": 1.0
+  },
+  {
+   "id": 22,
+   "difficulty": "medium",
+   "question": "Which tracks are in the playlist named 'Grunge'? Show the track names.",
+   "gold_tables": [
+    "Playlist",
+    "PlaylistTrack",
+    "Track"
+   ],
+   "sql": null,
+   "status": null,
+   "error": null,
+   "got_tables": [
+    "Playlist",
+    "Genre",
+    "Track",
+    "PlaylistTrack",
+    "Album"
+   ],
+   "recall": 1.0,
+   "rr": 1.0
+  },
+  {
+   "id": 23,
+   "difficulty": "medium",
+   "question": "Which genres have more than 100 tracks? Show the genre name and the track count.",
+   "gold_tables": [
+    "Genre",
+    "Track"
+   ],
+   "sql": null,
+   "status": null,
+   "error": null,
+   "got_tables": [
+    "Genre",
+    "Playlist",
+    "Track",
+    "PlaylistTrack",
+    "Artist",
+    "Album"
+   ],
+   "recall": 1.0,
+   "rr": 1.0
+  },
+  {
+   "id": 24,
+   "difficulty": "medium",
+   "question": "List each album by Iron Maiden with its number of tracks. Show the album title and the track count.",
+   "gold_tables": [
+    "Album",
+    "Artist",
+    "Track"
+   ],
+   "sql": null,
+   "status": null,
+   "error": null,
+   "got_tables": [
+    "Album",
+    "Genre",
+    "Track",
+    "Playlist",
+    "Artist",
+    "PlaylistTrack"
+   ],
+   "recall": 1.0,
+   "rr": 1.0
+  },
+  {
+   "id": 25,
+   "difficulty": "medium",
+   "question": "Which employees report to Nancy Edwards? Show their first and last names.",
+   "gold_tables": [
+    "Employee"
+   ],
+   "sql": null,
+   "status": null,
+   "error": null,
+   "got_tables": [
+    "Employee",
+    "Customer",
+    "Invoice",
+    "Artist"
+   ],
+   "recall": 1.0,
+   "rr": 1.0
+  },
+  {
+   "id": 26,
+   "difficulty": "medium",
+   "question": "What is the total amount spent by customers from each country? Show the country and the total.",
+   "gold_tables": [
+    "Customer",
+    "Invoice"
+   ],
+   "sql": null,
+   "status": null,
+   "error": null,
+   "got_tables": [
+    "Customer",
+    "Invoice",
+    "Employee",
+    "InvoiceLine"
+   ],
+   "recall": 1.0,
+   "rr": 1.0
+  },
+  {
+   "id": 27,
+   "difficulty": "medium",
+   "question": "How many tracks are there for each media type? Show the media type name and the track count.",
+   "gold_tables": [
+    "MediaType",
+    "Track"
+   ],
+   "sql": null,
+   "status": null,
+   "error": null,
+   "got_tables": [
+    "MediaType",
+    "PlaylistTrack",
+    "Track",
+    "Playlist",
+    "Genre"
+   ],
+   "recall": 1.0,
+   "rr": 1.0
+  },
+  {
+   "id": 28,
+   "difficulty": "medium",
+   "question": "Which genre has the most tracks? Show the genre name and the track count.",
+   "gold_tables": [
+    "Genre",
+    "Track"
+   ],
+   "sql": null,
+   "status": null,
+   "error": null,
+   "got_tables": [
+    "Genre",
+    "Track",
+    "PlaylistTrack",
+    "Playlist",
+    "Artist"
+   ],
+   "recall": 1.0,
+   "rr": 1.0
+  },
+  {
+   "id": 29,
+   "difficulty": "medium",
+   "question": "How much has the customer Luis Rojas spent in total?",
+   "gold_tables": [
+    "Customer",
+    "Invoice"
+   ],
+   "sql": null,
+   "status": null,
+   "error": null,
+   "got_tables": [
+    "Customer",
+    "Invoice",
+    "Employee",
+    "InvoiceLine",
+    "Track"
+   ],
+   "recall": 1.0,
+   "rr": 1.0
+  },
+  {
+   "id": 30,
+   "difficulty": "medium",
+   "question": "How many tracks does the artist Metallica have?",
+   "gold_tables": [
+    "Album",
+    "Artist",
+    "Track"
+   ],
+   "sql": null,
+   "status": null,
+   "error": null,
+   "got_tables": [
+    "Album",
+    "Track",
+    "Artist",
+    "PlaylistTrack",
+    "Genre"
+   ],
+   "recall": 1.0,
+   "rr": 1.0
+  },
+  {
+   "id": 31,
+   "difficulty": "hard",
+   "question": "Who is the best-selling artist by revenue? Show the artist name and the total revenue.",
+   "gold_tables": [
+    "Album",
+    "Artist",
+    "InvoiceLine",
+    "Track"
+   ],
+   "sql": null,
+   "status": null,
+   "error": null,
+   "got_tables": [
+    "Artist",
+    "Track",
+    "Album",
+    "InvoiceLine",
+    "Customer"
+   ],
+   "recall": 1.0,
+   "rr": 1.0
+  },
+  {
+   "id": 32,
+   "difficulty": "hard",
+   "question": "What are the top 3 genres by total revenue? Show the genre name and the revenue.",
+   "gold_tables": [
+    "Genre",
+    "InvoiceLine",
+    "Track"
+   ],
+   "sql": null,
+   "status": null,
+   "error": null,
+   "got_tables": [
+    "Genre",
+    "InvoiceLine",
+    "Track",
+    "Artist",
+    "Playlist",
+    "Customer"
+   ],
+   "recall": 1.0,
+   "rr": 1.0
+  },
+  {
+   "id": 33,
+   "difficulty": "hard",
+   "question": "Which customers have spent more than the average customer? Show their first and last names.",
+   "gold_tables": [
+    "Customer",
+    "Invoice"
+   ],
+   "sql": null,
+   "status": null,
+   "error": null,
+   "got_tables": [
+    "Customer",
+    "Employee",
+    "Invoice",
+    "InvoiceLine"
+   ],
+   "recall": 1.0,
+   "rr": 1.0
+  },
+  {
+   "id": 34,
+   "difficulty": "hard",
+   "question": "How many tracks have never been purchased?",
+   "gold_tables": [
+    "InvoiceLine",
+    "Track"
+   ],
+   "sql": null,
+   "status": null,
+   "error": null,
+   "got_tables": [
+    "Track",
+    "InvoiceLine",
+    "PlaylistTrack",
+    "Playlist",
+    "Album"
+   ],
+   "recall": 1.0,
+   "rr": 1.0
+  },
+  {
+   "id": 35,
+   "difficulty": "hard",
+   "question": "Which sales support employee's customers generated the most revenue? Show the employee's first name, last name and the total revenue.",
+   "gold_tables": [
+    "Customer",
+    "Employee",
+    "Invoice"
+   ],
+   "sql": null,
+   "status": null,
+   "error": null,
+   "got_tables": [
+    "Employee",
+    "Customer",
+    "InvoiceLine",
+    "Invoice"
+   ],
+   "recall": 1.0,
+   "rr": 1.0
+  },
+  {
+   "id": 36,
+   "difficulty": "hard",
+   "question": "Which customers have bought at least one Jazz track? Show their first and last names.",
+   "gold_tables": [
+    "Customer",
+    "Genre",
+    "Invoice",
+    "InvoiceLine",
+    "Track"
+   ],
+   "sql": null,
+   "status": null,
+   "error": null,
+   "got_tables": [
+    "Customer",
+    "Track",
+    "Artist",
+    "InvoiceLine",
+    "Genre",
+    "Invoice"
+   ],
+   "recall": 1.0,
+   "rr": 1.0
+  },
+  {
+   "id": 37,
+   "difficulty": "hard",
+   "question": "What percentage of the total revenue comes from invoices billed to the USA? Round to 2 decimal places.",
+   "gold_tables": [
+    "Invoice"
+   ],
+   "sql": null,
+   "status": null,
+   "error": null,
+   "got_tables": [
+    "Invoice",
+    "InvoiceLine",
+    "Customer",
+    "Employee",
+    "Track"
+   ],
+   "recall": 1.0,
+   "rr": 1.0
+  },
+  {
+   "id": 38,
+   "difficulty": "hard",
+   "question": "Which albums have more than 20 tracks? Show the album title and the track count.",
+   "gold_tables": [
+    "Album",
+    "Track"
+   ],
+   "sql": null,
+   "status": null,
+   "error": null,
+   "got_tables": [
+    "Album",
+    "Track",
+    "PlaylistTrack",
+    "Artist",
+    "Playlist",
+    "Genre"
+   ],
+   "recall": 1.0,
+   "rr": 1.0
+  },
+  {
+   "id": 39,
+   "difficulty": "hard",
+   "question": "Which playlists contain at least one track by AC/DC? Show the playlist names without duplicates.",
+   "gold_tables": [
+    "Album",
+    "Artist",
+    "Playlist",
+    "PlaylistTrack",
+    "Track"
+   ],
+   "sql": null,
+   "status": null,
+   "error": null,
+   "got_tables": [
+    "Playlist",
+    "PlaylistTrack",
+    "Genre",
+    "Track",
+    "Artist",
+    "Album"
+   ],
+   "recall": 1.0,
+   "rr": 1.0
+  },
+  {
+   "id": 40,
+   "difficulty": "hard",
+   "question": "Who are the top 2 customers by spending on Rock tracks? Show first name, last name and the amount spent.",
+   "gold_tables": [
+    "Customer",
+    "Genre",
+    "Invoice",
+    "InvoiceLine",
+    "Track"
+   ],
+   "sql": null,
+   "status": null,
+   "error": null,
+   "got_tables": [
+    "Track",
+    "Customer",
+    "InvoiceLine",
+    "Artist",
+    "PlaylistTrack"
+   ],
+   "recall": 0.6,
+   "rr": 1.0
+  }
+ ]
+}

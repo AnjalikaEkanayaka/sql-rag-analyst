@@ -148,3 +148,8 @@ def test_every_query_is_logged(tmp_log):
     entries = [json.loads(line) for line in tmp_log.read_text().splitlines()]
     assert [e["status"] for e in entries] == ["ok", "blocked"]
     assert "DROP TABLE" in entries[1]["sql"]
+
+def test_strict_mode_allows_only_listed_tables():
+    with pytest.raises(GuardError):
+        run_query("SELECT * FROM Invoice", tables=["Customer"])
+    assert run_query("SELECT COUNT(*) FROM Customer", tables=["Customer"])["rows"][0][0] == 59
