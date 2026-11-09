@@ -20,3 +20,4 @@
 | gen-nofk-k4 | 4 | 40 | 0.962 | 0.900 | 0.988 | 87.5% | 100.0% | 86.7% | 70.0% | dense, n_chunks=10, no FK hints, ~1660 prompt chars |
 | gen-k2 | 2 | 40 | 0.834 | 0.675 | 0.988 | 82.5% | 100.0% | 86.7% | 50.0% | dense, n_chunks=10, ~1217 prompt chars |
 | gen-strict-k2 | 2 | 40 | 0.834 | 0.675 | 0.988 | 65.0% | 100.0% | 53.3% | 30.0% | dense, n_chunks=10, strict tables, ~1217 prompt chars |
+| gen-strict-nofk-k4 | 4 | 40 | 0.962 | 0.900 | 0.988 | 87.5% | 100.0% | 86.7% | 70.0% | dense, n_chunks=10, no FK hints, strict tables, ~1660 prompt chars |

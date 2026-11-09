@@ -1,0 +1,854 @@
+{
+ "summary": {
+  "n": 40,
+  "k": 4,
+  "recall": 0.9616666666666667,
+  "hit_all": 0.9,
+  "mrr": 0.9875,
+  "exec_acc": 0.875,
+  "easy": 1.0,
+  "medium": 0.8666666666666667,
+  "hard": 0.7,
+  "status_counts": {
+   "correct": 35,
+   "wrong_result": 3,
+   "blocked": 2
+  },
+  "avg_prompt_chars": 1660
+ },
+ "records": [
+  {
+   "id": 1,
+   "difficulty": "easy",
+   "question": "How many customers are there?",
+   "gold_tables": [
+    "Customer"
+   ],
+   "sql": "SELECT COUNT(*) AS CustomerCount FROM Customer LIMIT 50",
+   "status": "correct",
+   "error": null,
+   "prompt_chars": 2048,
+   "got_tables": [
+    "Customer",
+    "Employee",
+    "Invoice",
+    "InvoiceLine"
+   ],
+   "recall": 1.0,
+   "rr": 1.0
+  },
+  {
+   "id": 2,
+   "difficulty": "easy",
+   "question": "How many tracks are there in total?",
+   "gold_tables": [
+    "Track"
+   ],
+   "sql": "SELECT COUNT(*) FROM Track LIMIT 50",
+   "status": "correct",
+   "error": null,
+   "prompt_chars": 1326,
+   "got_tables": [
+    "Track",
+    "PlaylistTrack",
+    "Album",
+    "Genre"
+   ],
+   "recall": 1.0,
+   "rr": 1.0
+  },
+  {
+   "id": 3,
+   "difficulty": "easy",
+   "question": "List the names of all genres.",
+   "gold_tables": [
+    "Genre"
+   ],
+   "sql": "SELECT Name FROM Genre LIMIT 50",
+   "status": "correct",
+   "error": null,
+   "prompt_chars": 1264,
+   "got_tables": [
+    "Genre",
+    "Playlist",
+    "Track",
+    "Artist"
+   ],
+   "recall": 1.0,
+   "rr": 1.0
+  },
+  {
+   "id": 4,
+   "difficulty": "easy",
+   "question": "What are the first and last names of the customers from Brazil?",
+   "gold_tables": [
+    "Customer"
+   ],
+   "sql": "SELECT FirstName, LastName FROM Customer WHERE Country = 'Brazil' LIMIT 50",
+   "status": "correct",
+   "error": null,
+   "prompt_chars": 1813,
+   "got_tables": [
+    "Customer",
+    "Employee",
+    "Invoice"
+   ],
+   "recall": 1.0,
+   "rr": 1.0
+  },
+  {
+   "id": 5,
+   "difficulty": "easy",
+   "question": "Show the names and lengths in milliseconds of the 5 longest tracks.",
+   "gold_tables": [
+    "Track"
+   ],
+   "sql": "SELECT Name, Milliseconds FROM Track ORDER BY Milliseconds DESC LIMIT 5",
+   "status": "correct",
+   "error": null,
+   "prompt_chars": 1361,
+   "got_tables": [
+    "Track",
+    "Playlist",
+    "PlaylistTrack",
+    "Genre"
+   ],
+   "recall": 1.0,
+   "rr": 1.0
+  },
+  {
+   "id": 6,
+   "difficulty": "easy",
+   "question": "How many invoices were issued in 2023?",
+   "gold_tables": [
+    "Invoice"
+   ],
+   "sql": "SELECT COUNT(*) AS InvoiceCount FROM Invoice WHERE STRFTIME('%Y', InvoiceDate) = '2023' LIMIT 50",
+   "status": "correct",
+   "error": null,
+   "prompt_chars": 2057,
+   "got_tables": [
+    "Invoice",
+    "InvoiceLine",
+    "Employee",
+    "Customer"
+   ],
+   "recall": 1.0,
+   "rr": 1.0
+  },
+  {
+   "id": 7,
+   "difficulty": "easy",
+   "question": "What is the average invoice total, rounded to 2 decimal places?",
+   "gold_tables": [
+    "Invoice"
+   ],
+   "sql": "SELECT ROUND(AVG(Total), 2) AS AvgInvoiceTotal FROM Invoice LIMIT 50",
+   "status": "correct",
+   "error": null,
+   "prompt_chars": 2082,
+   "got_tables": [
+    "Invoice",
+    "InvoiceLine",
+    "Customer",
+    "Employee"
+   ],
+   "recall": 1.0,
+   "rr": 1.0
+  },
+  {
+   "id": 8,
+   "difficulty": "easy",
+   "question": "What are the first and last names of the employees whose title is 'Sales Support Agent'?",
+   "gold_tables": [
+    "Employee"
+   ],
+   "sql": "SELECT FirstName, LastName FROM Employee WHERE Title = 'Sales Support Agent' LIMIT 50",
+   "status": "correct",
+   "error": null,
+   "prompt_chars": 2107,
+   "got_tables": [
+    "Employee",
+    "Customer",
+    "Invoice",
+    "InvoiceLine"
+   ],
+   "recall": 1.0,
+   "rr": 1.0
+  },
+  {
+   "id": 9,
+   "difficulty": "easy",
+   "question": "How many different countries do the customers come from?",
+   "gold_tables": [
+    "Customer"
+   ],
+   "sql": "SELECT COUNT(DISTINCT Country) AS CountryCount FROM Customer LIMIT 50",
+   "status": "correct",
+   "error": null,
+   "prompt_chars": 2075,
+   "got_tables": [
+    "Customer",
+    "Employee",
+    "Invoice",
+    "InvoiceLine"
+   ],
+   "recall": 1.0,
+   "rr": 1.0
+  },
+  {
+   "id": 10,
+   "difficulty": "easy",
+   "question": "List the names of all media types.",
+   "gold_tables": [
+    "MediaType"
+   ],
+   "sql": "SELECT Name FROM MediaType LIMIT 50",
+   "status": "correct",
+   "error": null,
+   "prompt_chars": 1303,
+   "got_tables": [
+    "MediaType",
+    "Genre",
+    "Playlist",
+    "Track"
+   ],
+   "recall": 1.0,
+   "rr": 1.0
+  },
+  {
+   "id": 11,
+   "difficulty": "easy",
+   "question": "How many albums are there?",
+   "gold_tables": [
+    "Album"
+   ],
+   "sql": "SELECT COUNT(*) FROM Album LIMIT 50",
+   "status": "correct",
+   "error": null,
+   "prompt_chars": 1144,
+   "got_tables": [
+    "Album",
+    "Artist",
+    "PlaylistTrack",
+    "Playlist"
+   ],
+   "recall": 1.0,
+   "rr": 1.0
+  },
+  {
+   "id": 12,
+   "difficulty": "easy",
+   "question": "How many tracks cost more than 0.99?",
+   "gold_tables": [
+    "Track"
+   ],
+   "sql": "SELECT COUNT(*) AS track_count FROM Track WHERE UnitPrice > 0.99 LIMIT 50",
+   "status": "correct",
+   "error": null,
+   "prompt_chars": 1452,
+   "got_tables": [
+    "Track",
+    "InvoiceLine",
+    "PlaylistTrack",
+    "Album"
+   ],
+   "recall": 1.0,
+   "rr": 1.0
+  },
+  {
+   "id": 13,
+   "difficulty": "easy",
+   "question": "What is the largest invoice total?",
+   "gold_tables": [
+    "Invoice"
+   ],
+   "sql": "SELECT MAX(Total) AS LargestInvoiceTotal FROM Invoice LIMIT 50",
+   "status": "correct",
+   "error": null,
+   "prompt_chars": 2053,
+   "got_tables": [
+    "Invoice",
+    "InvoiceLine",
+    "Employee",
+    "Customer"
+   ],
+   "recall": 1.0,
+   "rr": 1.0
+  },
+  {
+   "id": 14,
+   "difficulty": "easy",
+   "question": "How many customers have no company listed?",
+   "gold_tables": [
+    "Customer"
+   ],
+   "sql": "SELECT COUNT(*) AS NumCustomersWithoutCompany FROM Customer WHERE Company IS NULL OR Company = '' LIMIT 50",
+   "status": "correct",
+   "error": null,
+   "prompt_chars": 1792,
+   "got_tables": [
+    "Customer",
+    "Employee",
+    "Invoice"
+   ],
+   "recall": 1.0,
+   "rr": 1.0
+  },
+  {
+   "id": 15,
+   "difficulty": "easy",
+   "question": "What is the earliest hire date among the employees?",
+   "gold_tables": [
+    "Employee"
+   ],
+   "sql": "SELECT MIN(HireDate) AS EarliestHireDate FROM Employee LIMIT 50",
+   "status": "correct",
+   "error": null,
+   "prompt_chars": 1801,
+   "got_tables": [
+    "Employee",
+    "Invoice",
+    "Customer"
+   ],
+   "recall": 1.0,
+   "rr": 1.0
+  },
+  {
+   "id": 16,
+   "difficulty": "medium",
+   "question": "What are the titles of all albums by AC/DC?",
+   "gold_tables": [
+    "Album",
+    "Artist"
+   ],
+   "sql": "SELECT Album.Title FROM Album JOIN Artist ON Album.ArtistId = Artist.ArtistId WHERE Artist.Name = 'AC/DC' LIMIT 50",
+   "status": "correct",
+   "error": null,
+   "prompt_chars": 1275,
+   "got_tables": [
+    "Album",
+    "Artist",
+    "Genre",
+    "Track"
+   ],
+   "recall": 1.0,
+   "rr": 1.0
+  },
+  {
+   "id": 17,
+   "difficulty": "medium",
+   "question": "How many tracks does each genre have? Show the genre name and the track count.",
+   "gold_tables": [
+    "Genre",
+    "Track"
+   ],
+   "sql": "SELECT g.Name AS GenreName, COUNT(t.TrackId) AS TrackCount FROM Genre AS g LEFT JOIN Track AS t ON g.GenreId = t.GenreId GROUP BY g.GenreId, g.Name LIMIT 50",
+   "status": "correct",
+   "error": null,
+   "prompt_chars": 1372,
+   "got_tables": [
+    "Genre",
+    "Track",
+    "Playlist",
+    "PlaylistTrack"
+   ],
+   "recall": 1.0,
+   "rr": 1.0
+  },
+  {
+   "id": 18,
+   "difficulty": "medium",
+   "question": "Who are the top 5 customers by total spending? Show first name, last name and total spent.",
+   "gold_tables": [
+    "Customer",
+    "Invoice"
+   ],
+   "sql": "SELECT c.FirstName, c.LastName, SUM(i.Total) AS TotalSpent FROM Customer AS c JOIN Invoice AS i ON c.CustomerId = i.CustomerId GROUP BY c.CustomerId, c.FirstName, c.LastName ORDER BY TotalSpent DESC LIMIT 5",
+   "status": "correct",
+   "error": null,
+   "prompt_chars": 1840,
+   "got_tables": [
+    "Customer",
+    "Employee",
+    "Invoice"
+   ],
+   "recall": 1.0,
+   "rr": 1.0
+  },
+  {
+   "id": 19,
+   "difficulty": "medium",
+   "question": "What is the total revenue for each year? Show the year and the revenue.",
+   "gold_tables": [
+    "Invoice"
+   ],
+   "sql": "SELECT STRFTIME('%Y', i.InvoiceDate) AS Year, SUM(il.UnitPrice * il.Quantity) AS Revenue FROM InvoiceLine AS il JOIN Invoice AS i ON il.InvoiceId = i.InvoiceId GROUP BY Year ORDER BY Year LIMIT 50",
+   "status": "correct",
+   "error": null,
+   "prompt_chars": 1940,
+   "got_tables": [
+    "InvoiceLine",
+    "Invoice",
+    "Customer",
+    "Track"
+   ],
+   "recall": 1.0,
+   "rr": 0.5
+  },
+  {
+   "id": 20,
+   "difficulty": "medium",
+   "question": "How many customers does each support representative have? Show the representative's first name, last name and the number of customers.",
+   "gold_tables": [
+    "Customer",
+    "Employee"
+   ],
+   "sql": "SELECT e.FirstName, e.LastName, COUNT(c.CustomerId) AS CustomerCount FROM Employee AS e LEFT JOIN Customer AS c ON e.EmployeeId = c.SupportRepId GROUP BY e.EmployeeId, e.FirstName, e.LastName LIMIT 50",
+   "status": "wrong_result",
+   "error": null,
+   "prompt_chars": 1884,
+   "got_tables": [
+    "Customer",
+    "Employee",
+    "Invoice"
+   ],
+   "recall": 1.0,
+   "rr": 1.0
+  },
+  {
+   "id": 21,
+   "difficulty": "medium",
+   "question": "Which 5 artists have the most albums? Show the artist name and the number of albums.",
+   "gold_tables": [
+    "Album",
+    "Artist"
+   ],
+   "sql": "SELECT a.Name, COUNT(al.AlbumId) AS AlbumCount FROM Artist AS a JOIN Album AS al ON a.ArtistId = al.ArtistId GROUP BY a.ArtistId, a.Name ORDER BY AlbumCount DESC LIMIT 5",
+   "status": "correct",
+   "error": null,
+   "prompt_chars": 1156,
+   "got_tables": [
+    "Artist",
+    "Album",
+    "Genre",
+    "Playlist"
+   ],
+   "recall": 1.0,
+   "rr": 1.0
+  },
+  {
+   "id": 22,
+   "difficulty": "medium",
+   "question": "Which tracks are in the playlist named 'Grunge'? Show the track names.",
+   "gold_tables": [
+    "Playlist",
+    "PlaylistTrack",
+    "Track"
+   ],
+   "sql": "SELECT t.Name FROM Track AS t JOIN PlaylistTrack AS pt ON t.TrackId = pt.TrackId JOIN Playlist AS p ON pt.PlaylistId = p.PlaylistId WHERE p.Name = 'Grunge' LIMIT 50",
+   "status": "correct",
+   "error": null,
+   "prompt_chars": 1364,
+   "got_tables": [
+    "Playlist",
+    "Genre",
+    "Track",
+    "PlaylistTrack"
+   ],
+   "recall": 1.0,
+   "rr": 1.0
+  },
+  {
+   "id": 23,
+   "difficulty": "medium",
+   "question": "Which genres have more than 100 tracks? Show the genre name and the track count.",
+   "gold_tables": [
+    "Genre",
+    "Track"
+   ],
+   "sql": "SELECT g.Name, COUNT(t.TrackId) AS TrackCount FROM Genre AS g JOIN Track AS t ON g.GenreId = t.GenreId GROUP BY g.GenreId, g.Name HAVING COUNT(t.TrackId) > 100 LIMIT 50",
+   "status": "correct",
+   "error": null,
+   "prompt_chars": 1374,
+   "got_tables": [
+    "Genre",
+    "Playlist",
+    "Track",
+    "PlaylistTrack"
+   ],
+   "recall": 1.0,
+   "rr": 1.0
+  },
+  {
+   "id": 24,
+   "difficulty": "medium",
+   "question": "List each album by Iron Maiden with its number of tracks. Show the album title and the track count.",
+   "gold_tables": [
+    "Album",
+    "Artist",
+    "Track"
+   ],
+   "sql": "SELECT a.Title, COUNT(t.TrackId) AS TrackCount FROM Album AS a LEFT JOIN Track AS t ON a.AlbumId = t.AlbumId GROUP BY a.AlbumId, a.Title LIMIT 50",
+   "status": "wrong_result",
+   "error": null,
+   "prompt_chars": 1369,
+   "got_tables": [
+    "Album",
+    "Genre",
+    "Track",
+    "Playlist"
+   ],
+   "recall": 0.6666666666666666,
+   "rr": 1.0
+  },
+  {
+   "id": 25,
+   "difficulty": "medium",
+   "question": "Which employees report to Nancy Edwards? Show their first and last names.",
+   "gold_tables": [
+    "Employee"
+   ],
+   "sql": "SELECT e.FirstName, e.LastName FROM Employee AS e WHERE e.ReportsTo = (SELECT EmployeeId FROM Employee WHERE FirstName = 'Nancy' AND LastName = 'Edwards') LIMIT 50",
+   "status": "correct",
+   "error": null,
+   "prompt_chars": 1954,
+   "got_tables": [
+    "Employee",
+    "Customer",
+    "Invoice",
+    "Artist"
+   ],
+   "recall": 1.0,
+   "rr": 1.0
+  },
+  {
+   "id": 26,
+   "difficulty": "medium",
+   "question": "What is the total amount spent by customers from each country? Show the country and the total.",
+   "gold_tables": [
+    "Customer",
+    "Invoice"
+   ],
+   "sql": "SELECT c.Country, SUM(i.Total) AS TotalSpent FROM Customer AS c JOIN Invoice AS i ON c.CustomerId = i.CustomerId GROUP BY c.Country LIMIT 50",
+   "status": "correct",
+   "error": null,
+   "prompt_chars": 2113,
+   "got_tables": [
+    "Customer",
+    "Invoice",
+    "Employee",
+    "InvoiceLine"
+   ],
+   "recall": 1.0,
+   "rr": 1.0
+  },
+  {
+   "id": 27,
+   "difficulty": "medium",
+   "question": "How many tracks are there for each media type? Show the media type name and the track count.",
+   "gold_tables": [
+    "MediaType",
+    "Track"
+   ],
+   "sql": "SELECT MediaType.Name, COUNT(Track.TrackId) AS TrackCount FROM Track JOIN MediaType ON Track.MediaTypeId = MediaType.MediaTypeId GROUP BY MediaType.Name LIMIT 50",
+   "status": "correct",
+   "error": null,
+   "prompt_chars": 1407,
+   "got_tables": [
+    "MediaType",
+    "PlaylistTrack",
+    "Track",
+    "Playlist"
+   ],
+   "recall": 1.0,
+   "rr": 1.0
+  },
+  {
+   "id": 28,
+   "difficulty": "medium",
+   "question": "Which genre has the most tracks? Show the genre name and the track count.",
+   "gold_tables": [
+    "Genre",
+    "Track"
+   ],
+   "sql": "SELECT g.Name, COUNT(t.TrackId) AS TrackCount FROM Genre AS g JOIN Track AS t ON g.GenreId = t.GenreId GROUP BY g.GenreId, g.Name ORDER BY TrackCount DESC LIMIT 1",
+   "status": "correct",
+   "error": null,
+   "prompt_chars": 1367,
+   "got_tables": [
+    "Genre",
+    "Track",
+    "PlaylistTrack",
+    "Playlist"
+   ],
+   "recall": 1.0,
+   "rr": 1.0
+  },
+  {
+   "id": 29,
+   "difficulty": "medium",
+   "question": "How much has the customer Luis Rojas spent in total?",
+   "gold_tables": [
+    "Customer",
+    "Invoice"
+   ],
+   "sql": "SELECT SUM(i.Total) AS TotalSpent FROM Customer AS c JOIN Invoice AS i ON c.CustomerId = i.CustomerId WHERE c.FirstName = 'Luis' AND c.LastName = 'Rojas' LIMIT 50",
+   "status": "correct",
+   "error": null,
+   "prompt_chars": 2071,
+   "got_tables": [
+    "Customer",
+    "Invoice",
+    "Employee",
+    "InvoiceLine"
+   ],
+   "recall": 1.0,
+   "rr": 1.0
+  },
+  {
+   "id": 30,
+   "difficulty": "medium",
+   "question": "How many tracks does the artist Metallica have?",
+   "gold_tables": [
+    "Album",
+    "Artist",
+    "Track"
+   ],
+   "sql": "SELECT COUNT(*) AS track_count FROM Track AS t JOIN Album AS a ON t.AlbumId = a.AlbumId JOIN Artist AS ar ON a.ArtistId = ar.ArtistId WHERE ar.Name = 'Metallica' LIMIT 50",
+   "status": "correct",
+   "error": null,
+   "prompt_chars": 1325,
+   "got_tables": [
+    "Album",
+    "Track",
+    "Artist",
+    "PlaylistTrack"
+   ],
+   "recall": 1.0,
+   "rr": 1.0
+  },
+  {
+   "id": 31,
+   "difficulty": "hard",
+   "question": "Who is the best-selling artist by revenue? Show the artist name and the total revenue.",
+   "gold_tables": [
+    "Album",
+    "Artist",
+    "InvoiceLine",
+    "Track"
+   ],
+   "sql": "SELECT a.Name AS ArtistName, SUM(il.UnitPrice * il.Quantity) AS TotalRevenue FROM Artist AS a JOIN Album AS al ON a.ArtistId = al.ArtistId JOIN Track AS t ON al.AlbumId = t.AlbumId JOIN InvoiceLine AS il ON t.TrackId = il.TrackId GROUP BY a.ArtistId, a.Name ORDER BY TotalRevenue DESC LIMIT 1",
+   "status": "correct",
+   "error": null,
+   "prompt_chars": 1443,
+   "got_tables": [
+    "Artist",
+    "Track",
+    "Album",
+    "InvoiceLine"
+   ],
+   "recall": 1.0,
+   "rr": 1.0
+  },
+  {
+   "id": 32,
+   "difficulty": "hard",
+   "question": "What are the top 3 genres by total revenue? Show the genre name and the revenue.",
+   "gold_tables": [
+    "Genre",
+    "InvoiceLine",
+    "Track"
+   ],
+   "sql": "SELECT g.Name AS Genre, SUM(il.UnitPrice * il.Quantity) AS Revenue FROM InvoiceLine AS il JOIN Track AS t ON il.TrackId = t.TrackId JOIN Genre AS g ON t.GenreId = g.GenreId GROUP BY g.GenreId, g.Name ORDER BY Revenue DESC LIMIT 3",
+   "status": "correct",
+   "error": null,
+   "prompt_chars": 1415,
+   "got_tables": [
+    "Genre",
+    "InvoiceLine",
+    "Track",
+    "Artist"
+   ],
+   "recall": 1.0,
+   "rr": 1.0
+  },
+  {
+   "id": 33,
+   "difficulty": "hard",
+   "question": "Which customers have spent more than the average customer? Show their first and last names.",
+   "gold_tables": [
+    "Customer",
+    "Invoice"
+   ],
+   "sql": "SELECT c.FirstName, c.LastName FROM Customer AS c JOIN (SELECT CustomerId, SUM(Total) AS TotalSpent FROM Invoice GROUP BY CustomerId) AS i ON c.CustomerId = i.CustomerId WHERE i.TotalSpent > (SELECT AVG(TotalSpent) FROM (SELECT CustomerId, SUM(Total) AS TotalSpent FROM Invoice GROUP BY CustomerId) AS sub) LIMIT 50",
+   "status": "correct",
+   "error": null,
+   "prompt_chars": 2110,
+   "got_tables": [
+    "Customer",
+    "Employee",
+    "Invoice",
+    "InvoiceLine"
+   ],
+   "recall": 1.0,
+   "rr": 1.0
+  },
+  {
+   "id": 34,
+   "difficulty": "hard",
+   "question": "How many tracks have never been purchased?",
+   "gold_tables": [
+    "InvoiceLine",
+    "Track"
+   ],
+   "sql": "SELECT COUNT(*) AS tracks_never_purchased FROM Track AS t LEFT JOIN InvoiceLine AS il ON t.TrackId = il.TrackId WHERE il.InvoiceLineId IS NULL LIMIT 50",
+   "status": "correct",
+   "error": null,
+   "prompt_chars": 1461,
+   "got_tables": [
+    "Track",
+    "InvoiceLine",
+    "PlaylistTrack",
+    "Playlist"
+   ],
+   "recall": 1.0,
+   "rr": 1.0
+  },
+  {
+   "id": 35,
+   "difficulty": "hard",
+   "question": "Which sales support employee's customers generated the most revenue? Show the employee's first name, last name and the total revenue.",
+   "gold_tables": [
+    "Customer",
+    "Employee",
+    "Invoice"
+   ],
+   "sql": "SELECT e.FirstName, e.LastName, SUM(i.Total) AS TotalRevenue FROM Employee AS e JOIN Customer AS c ON c.SupportRepId = e.EmployeeId JOIN Invoice AS i ON i.CustomerId = c.CustomerId GROUP BY e.EmployeeId, e.FirstName, e.LastName ORDER BY TotalRevenue DESC LIMIT 1",
+   "status": "correct",
+   "error": null,
+   "prompt_chars": 2152,
+   "got_tables": [
+    "Employee",
+    "Customer",
+    "InvoiceLine",
+    "Invoice"
+   ],
+   "recall": 1.0,
+   "rr": 1.0
+  },
+  {
+   "id": 36,
+   "difficulty": "hard",
+   "question": "Which customers have bought at least one Jazz track? Show their first and last names.",
+   "gold_tables": [
+    "Customer",
+    "Genre",
+    "Invoice",
+    "InvoiceLine",
+    "Track"
+   ],
+   "sql": "SELECT DISTINCT c.FirstName, c.LastName\nFROM Customer c\nJOIN InvoiceLine il ON c.CustomerId = il.InvoiceId\nJOIN Track t ON il.TrackId = t.TrackId\nJOIN Genre g ON t.GenreId = g.GenreId\nWHERE g.Name = 'Jazz';",
+   "status": "blocked",
+   "error": "GuardError: unknown table: Genre",
+   "prompt_chars": 1725,
+   "got_tables": [
+    "Customer",
+    "Track",
+    "Artist",
+    "InvoiceLine"
+   ],
+   "recall": 0.6,
+   "rr": 1.0
+  },
+  {
+   "id": 37,
+   "difficulty": "hard",
+   "question": "What percentage of the total revenue comes from invoices billed to the USA? Round to 2 decimal places.",
+   "gold_tables": [
+    "Invoice"
+   ],
+   "sql": "SELECT ROUND(100.0 * usa.total_us / total.total_all, 2) AS pct FROM (SELECT SUM(Total) AS total_all FROM Invoice) AS total CROSS JOIN (SELECT SUM(Total) AS total_us FROM Invoice WHERE BillingCountry = 'USA') AS usa LIMIT 50",
+   "status": "correct",
+   "error": null,
+   "prompt_chars": 2121,
+   "got_tables": [
+    "Invoice",
+    "InvoiceLine",
+    "Customer",
+    "Employee"
+   ],
+   "recall": 1.0,
+   "rr": 1.0
+  },
+  {
+   "id": 38,
+   "difficulty": "hard",
+   "question": "Which albums have more than 20 tracks? Show the album title and the track count.",
+   "gold_tables": [
+    "Album",
+    "Track"
+   ],
+   "sql": "SELECT a.Title, COUNT(t.TrackId) AS TrackCount FROM Album AS a JOIN Track AS t ON a.AlbumId = t.AlbumId GROUP BY a.AlbumId, a.Title HAVING COUNT(t.TrackId) > 20 LIMIT 50",
+   "status": "correct",
+   "error": null,
+   "prompt_chars": 1358,
+   "got_tables": [
+    "Album",
+    "Track",
+    "PlaylistTrack",
+    "Artist"
+   ],
+   "recall": 1.0,
+   "rr": 1.0
+  },
+  {
+   "id": 39,
+   "difficulty": "hard",
+   "question": "Which playlists contain at least one track by AC/DC? Show the playlist names without duplicates.",
+   "gold_tables": [
+    "Album",
+    "Artist",
+    "Playlist",
+    "PlaylistTrack",
+    "Track"
+   ],
+   "sql": "SELECT DISTINCT p.Name FROM Playlist AS p JOIN PlaylistTrack AS pt ON p.PlaylistId = pt.PlaylistId JOIN Track AS t ON pt.TrackId = t.TrackId WHERE t.Composer LIKE '%AC/DC%' LIMIT 50",
+   "status": "wrong_result",
+   "error": null,
+   "prompt_chars": 1390,
+   "got_tables": [
+    "Playlist",
+    "PlaylistTrack",
+    "Genre",
+    "Track"
+   ],
+   "recall": 0.6,
+   "rr": 1.0
+  },
+  {
+   "id": 40,
+   "difficulty": "hard",
+   "question": "Who are the top 2 customers by spending on Rock tracks? Show first name, last name and the amount spent.",
+   "gold_tables": [
+    "Customer",
+    "Genre",
+    "Invoice",
+    "InvoiceLine",
+    "Track"
+   ],
+   "sql": "SELECT c.FirstName, c.LastName, SUM(il.UnitPrice * il.Quantity) AS TotalSpent\nFROM Customer c\nJOIN InvoiceLine il ON c.CustomerId = il.InvoiceId\nJOIN Track t ON il.TrackId = t.TrackId\nWHERE t.GenreId = (SELECT GenreId FROM Genre WHERE Name = 'Rock')\nGROUP BY c.CustomerId, c.FirstName, c.LastName\nORDER BY TotalSpent DESC\nLIMIT 2;",
+   "status": "blocked",
+   "error": "GuardError: unknown table: Genre",
+   "prompt_chars": 1744,
+   "got_tables": [
+    "Track",
+    "Customer",
+    "InvoiceLine",
+    "Artist"
+   ],
+   "recall": 0.6,
+   "rr": 1.0
+  }
+ ]
+}
