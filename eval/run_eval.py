@@ -2,7 +2,8 @@
 
 Usage (from project root):
     python -m eval.run_eval --name baseline --k 4
-    python -m eval.run_eval --name retrieval-k3 --k 3 --retrieval-only
+    python -m eval.run_eval --name ret-k3 --k 3 --retrieval-only --quiet
+    python -m eval.run_eval --name gen-retry1 --k 4 --strict --no-fk-hints --retries 1 --quiet
     python -m eval.run_eval --name smoke --limit 5          # not recorded in results.md
 """
 import argparse
@@ -94,27 +95,41 @@ def main():
     ap.add_argument("--retrieval-only", action="store_true", help="no LLM calls")
     ap.add_argument("--limit", type=int, help="only the first N questions (not recorded)")
     ap.add_argument("--notes", default="")
+    # retrieval options (Day 6)
     ap.add_argument("--mode", default="dense", choices=["dense", "bm25", "hybrid"])
     ap.add_argument("--n-chunks", type=int, default=10)
     ap.add_argument("--fk-expand", action="store_true")
     ap.add_argument("--fk-boost", type=float, default=0.8)
     ap.add_argument("--quiet", action="store_true")
+    # control options (Day 7A)
     ap.add_argument("--schema", default="lean", choices=["lean", "none"])
     ap.add_argument("--no-fk-hints", action="store_true")
     ap.add_argument("--strict", action="store_true")
+    # generation options (Day 7B)
+    ap.add_argument("--retries", type=int, default=0)
+    ap.add_argument("--fewshot", action="store_true")
+    ap.add_argument("--col-desc", action="store_true")
+    ap.add_argument("--examples", action="store_true", help="example values in schema")
     args = ap.parse_args()
 
     opts = dict(mode=args.mode, n_chunks=args.n_chunks,
                 fk_expand=args.fk_expand, fk_boost=args.fk_boost)
     notes = args.notes or (f"{args.mode}, n_chunks={args.n_chunks}"
                            + (f", fk-expand boost={args.fk_boost}" if args.fk_expand else ""))
-
     if args.schema == "none":
         notes += ", NO schema"
     if args.no_fk_hints:
         notes += ", no FK hints"
     if args.strict:
         notes += ", strict tables"
+    if args.retries:
+        notes += f", retries={args.retries}"
+    if args.fewshot:
+        notes += ", few-shot"
+    if args.col_desc:
+        notes += ", col descriptions"
+    if args.examples:
+        notes += ", example values"
 
     sql_guard.LOG_PATH = Path("logs/eval_queries.jsonl")  # keep eval out of the main audit log
     questions = json.loads(QUESTIONS.read_text(encoding="utf-8"))
@@ -133,10 +148,12 @@ def main():
             got = [r["table"] for r in retrieve(q["question"], k=args.k, **opts)]
         else:
             out = ask(q["question"], k=args.k, explain=False, schema=args.schema,
-                      fk_hints=not args.no_fk_hints, strict=args.strict)
+                      fk_hints=not args.no_fk_hints, strict=args.strict,
+                      col_desc=args.col_desc, examples=args.examples,
+                      fewshot=args.fewshot, retries=args.retries)
             got = out["tables"]
             rec.update(sql=out["sql"], error=out["error"], status=classify(out, gold_norm),
-                       prompt_chars=out["prompt_chars"])
+                       prompt_chars=out["prompt_chars"], retries_used=out["retries_used"])
             if rec["status"] == "llm_error":
                 raise SystemExit(f"\nLLM failure on #{q['id']}: {out['error']}\n"
                                  "Stopping so the numbers are not polluted. Answers so far are cached, "
@@ -146,11 +163,13 @@ def main():
         records.append(rec)
         if not args.quiet:
             print(f"#{q['id']:>2} {q['difficulty']:<6} recall={rec['recall']:.2f} {rec['status'] or ''}")
-        
+
     s = summarize(records, args.k, args.retrieval_only)
     if not args.retrieval_only:
         s["avg_prompt_chars"] = round(mean(r["prompt_chars"] for r in records))
         notes += f", ~{s['avg_prompt_chars']} prompt chars"
+        if args.retries:
+            notes += f", {sum(r['retries_used'] for r in records)} retry calls"
     print("\n" + json.dumps(s, indent=1))
 
     RUNS_DIR.mkdir(parents=True, exist_ok=True)

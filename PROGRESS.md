@@ -89,6 +89,18 @@
 - Conclusion: plain dense is as good as any variant; k is the main lever (accuracy vs prompt size). 7 variants tried on the same 40 questions, so the +1 is post-hoc and not claimed
 - Limitation: 11-table schema; k=6 covers over half of it, so retrieval benefits at scale are not demonstrated
 
+## Day 7 (part A) - DONE: control experiments (40 questions, exec acc)
+- baseline k4 97.5% | strict k4 (guard allows only retrieved tables) 90.0% | no FK hints k4 87.5% | no schema 55.0% (easy 20%, medium 86.7%, hard 60%; easy result unexplained, inspect) | k2 82.5% | strict k2 65.0%
+- Strict accuracy ~ hit-all: k4 90.0% vs 90.0%; k2 65.0% vs 67.5% -> accuracy ~ P(retrieval complete) x P(correct | complete); almost all errors are retrieval errors
+- Outside-knowledge "rescue" (non-strict minus strict): +7.5 pts at k4, +17.5 pts at k2 (will not transfer to a private DB)
+- FK REFERENCES lines help by 10 pts at k4 (join guidance, not only a leak)
+- Reporting policy: headline = strict numbers (conservative); unrestricted shown with caveat
+- Private-DB considerations (README): no memorization, cryptic names, undeclared FKs, business definitions, privacy of sending schema/rows to a third-party API, SQL dialect, permissions; strict mode doubles as least-privilege security
+- Prompt size: k4 ~1800 chars, k2 ~1217, no FK ~1660, no schema ~470
+
+- CORRECTION: no-schema failures (18): 12 unknown-table blocks (plural/variant names), 5 invented columns, 1 wrong result -> LLM memory of Chinook is name-level and weak
+- strict+no-FK k4 = 87.5% = non-strict no-FK; therefore the earlier +7.5pt "rescue" came from FK REFERENCES lines naming neighbour tables (prompt leak), not memorization. True FK join-guidance effect ~1 question (strict with FK 36/40 vs without 35/40)
+- Realistic baseline for Part B: strict + no FK hints + k4 = 87.5% (easy 15/15, medium 13/15, hard 7/10); given complete retrieval (36/40) the model got 35/36; 4 of 5 failures are retrieval misses -> generation has little headroom
 
 ## CV-ready facts
 - SQLite/Chinook: 11 tables, 64 columns documented in a hybrid auto + manual data dictionary

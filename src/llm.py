@@ -5,6 +5,7 @@ import os
 import random
 import sqlite3
 import time
+import sys
 from abc import ABC, abstractmethod
 
 import requests
@@ -114,7 +115,7 @@ class CachedLLM:
                 if wait > 120:  # e.g. daily quota used up: waiting is pointless
                     raise LLMError(f"asked to wait {wait:.0f}s, likely daily quota: {e}")
                 wait += random.uniform(0, 1)  # jitter
-                print(f"  [retry {attempt + 1}] waiting {wait:.1f}s ({str(e)[:80]})")
+                print(f"  [retry {attempt + 1}] waiting {wait:.1f}s ({str(e)[:80]})", file=sys.stderr)
                 time.sleep(wait)
 
 
