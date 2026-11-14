@@ -102,6 +102,28 @@
 - strict+no-FK k4 = 87.5% = non-strict no-FK; therefore the earlier +7.5pt "rescue" came from FK REFERENCES lines naming neighbour tables (prompt leak), not memorization. True FK join-guidance effect ~1 question (strict with FK 36/40 vs without 35/40)
 - Realistic baseline for Part B: strict + no FK hints + k4 = 87.5% (easy 15/15, medium 13/15, hard 7/10); given complete retrieval (36/40) the model got 35/36; 4 of 5 failures are retrieval misses -> generation has little headroom
 
+## Day 7 (part B) - DONE: generation experiments on the realistic baseline (strict, no FK hints, k4 = 35/40 = 87.5%)
+- retry-1: 35/40 (mix 5 wrong, 0 blocked): loud blocks turned into silent wrong answers; do not enable by default (if used, retry only QueryError, not unknown-table GuardError)
+- column descriptions: 35/40 (2 wrong, 3 blocked), prompt +48%
+- example values: 35/40 (2 wrong, 3 blocked), prompt +64% (sends data values to the LLM provider: privacy concern on real DBs)
+- few-shot (3 verified examples, none from the eval set): 35/40 (2 wrong, 3 blocked), prompt +41%
+- Conclusion: zero measured gain from any generation technique; given complete retrieval the model was correct 35/36; accuracy is limited by retrieval
+- Failure analysis: #24, #36, #39, #40 = retrieval misses on tables referenced via values (artist/genre names) or actions (bought/spent); #20 = ambiguous gold (LEFT vs inner join), gold not edited after seeing results
+- Future work: value-based schema linking (index distinct values of low-cardinality columns)
+
+## Day 8 - DONE: MCP server
+- src/mcp_server.py on MCP Python SDK 2.3.0 (v2 renamed FastMCP to MCPServer: `from mcp.server.mcpserver import MCPServer`); stdio transport
+- Tools: get_schema(question, k=4), run_query(sql) [named via name=; function run_sql], ask_database(question); Resource: dictionary://chinook (data/data_dictionary.md)
+- Guard errors raised as ToolError so the client sees the reason (v2 hides other exception text)
+- Return type dict[str, Any] gives structured output; ask_database returns pipeline errors in-band (error field), run_query raises tool errors (to unify on Day 9)
+- sys.path + os.chdir(ROOT) at top because clients launch servers from arbitrary directories; heavy imports (chromadb, fastembed) are inside the tools so the handshake is fast
+- stdout must stay protocol-only: llm.py retry messages go to stderr
+- STRICT_TABLES=1 env var turns on retrieved-tables-only guard (default off, matching the 97.5% baseline)
+- scripts/mcp_smoke.py: SDK client over stdio; passes (tools, get_schema, run_query ok + DROP blocked, ask_database, resource)
+- MCP Inspector v1.0.5 (npx @modelcontextprotocol/inspector .venv/Scripts/python.exe src/mcp_server.py): 8/8 manual checks passed
+- Gotchas: Inspector splits args with shell-quote, which strips backslashes (use src/mcp_server.py with forward slashes); Inspector keeps the terminal busy (use a second terminal)
+
+
 ## CV-ready facts
 - SQLite/Chinook: 11 tables, 64 columns documented in a hybrid auto + manual data dictionary
 - RAG over a schema dictionary: 28 chunks, bge-small ONNX embeddings, ChromaDB; finding: embedding-only retrieval misses join-bridge tables
