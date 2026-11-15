@@ -85,7 +85,8 @@ def run_sql(sql: Sql) -> dict[str, Any]:
 
     Use this after get_schema when you want to write the SQL yourself. SQLite dialect (for
     dates use strftime). Only SELECT on the known tables is allowed, so no INSERT, UPDATE,
-    DELETE, DROP, PRAGMA or multiple statements. At most 50 rows are returned (a LIMIT is
+    DELETE, DROP, PRAGMA or multiple statements. System tables such as sqlite_master are not
+    accessible: use get_schema to see table structure. At most 50 rows are returned (a LIMIT is
     added if missing) and a query is stopped after 5 seconds. Returns 'sql' (what actually ran),
     'columns', 'rows' and 'truncated' (true if the 50-row cap was reached).
     """
@@ -102,8 +103,10 @@ def ask_database(question: Question) -> dict[str, Any]:
     Finds the relevant tables, has a language model write a read-only SQL query, validates and
     runs it, and explains the result. Returns 'sql', 'tables' (the schema the model was given),
     'columns', 'rows' (at most 50) and 'explanation'. The SQL is machine-generated and can be
-    wrong, so check 'sql' before relying on the answer; for exact control use get_schema and
-    run_query instead. The question and table definitions are sent to an external LLM service.
+    wrong, so check 'sql' before relying on the answer. If 'tables' lacks a table the question
+    clearly needs (for example sales data without InvoiceLine), or the result looks wrong, use
+    get_schema and run_query instead. The question and table definitions are sent to an
+    external LLM service.
     """
     try:
         from src.pipeline import ask

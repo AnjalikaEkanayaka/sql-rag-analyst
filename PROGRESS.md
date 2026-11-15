@@ -123,6 +123,15 @@
 - MCP Inspector v1.0.5 (npx @modelcontextprotocol/inspector .venv/Scripts/python.exe src/mcp_server.py): 8/8 manual checks passed
 - Gotchas: Inspector splits args with shell-quote, which strips backslashes (use src/mcp_server.py with forward slashes); Inspector keeps the terminal busy (use a second terminal)
 
+## Day 9 - DONE: MCP hardening + real-client test
+- Inputs validated through the tool schema (pydantic via Annotated): question 3-500 chars (trimmed), k 1..11, sql 1..2000 chars; violations return isError with a validation message
+- ToolAnnotations: readOnlyHint, destructiveHint=false, idempotentHint; ask_database also openWorldHint (calls an external LLM)
+- Descriptions rewritten: when to use, SQL dialect, limits, return fields, fallbacks; system-table note added after the trace review
+- Errors: get_schema / run_query / ask_database raise ToolError with reason + next step; ask_database maps GuardError / QueryError / LLMError / other and includes the SQL attempted; crashes explained with the index-build hint
+- tests/test_mcp_server.py: 22 tests (tools, resource, annotations, schema limits, invalid inputs, attack messages, failure mapping)
+- scripts/mcp_agent.py: MCP client + Groq tool-calling loop (disk-cached); --suite runs 6 prompts, saves eval/runs/mcp-agent.json
+- Live-client findings (gpt-oss-20b, 6 prompts, 1 run each): sensible tool choice (ask_database for simple questions, get_schema for structure); on best-selling-artist the agent left ask_database (retrieval missed InvoiceLine) and did get_schema + run_query: Iron Maiden $138.60, verified correct (U2 second, 105.93); the model refused the delete and sqlite_master prompts itself, so the guard was not exercised live (covered by pytest)
+- Caveats: qualitative, one model, one run; descriptions should be clear, not tuned to one model
 
 ## CV-ready facts
 - SQLite/Chinook: 11 tables, 64 columns documented in a hybrid auto + manual data dictionary
