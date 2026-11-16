@@ -1,10 +1,11 @@
 """Question -> retrieve schema -> LLM writes SQL -> execute -> explain."""
 import json
 import re
+import sys
 from functools import lru_cache
 from pathlib import Path
 
-from src.llm import get_llm
+from src.llm import LLMError, get_llm
 from src.retrieval import retrieve
 from src.sql_guard import GuardError, QueryError, run_query
 
@@ -82,10 +83,15 @@ def ask(question, k=4, explain=True, schema="lean", fk_hints=True, strict=False,
     schema text. fewshot: add 3 worked examples. retries: re-ask the LLM with the error message."""
     if strict and schema == "none":
         raise ValueError("strict mode needs retrieved tables (schema='lean')")
-    llm = get_llm()
+    
     result = {"question": question, "tables": [], "sql": None, "columns": [],
               "rows": [], "explanation": None, "error": None, "prompt_chars": 0,
               "retries_used": 0}
+    try:
+        llm = get_llm()
+    except LLMError as e:  # e.g. missing API key: report it like any other LLM failure
+        result["error"] = f"LLMError: {e}"
+        return result
     if schema == "none":
         system = SQL_SYSTEM_NOSCHEMA
         prompt = f"<question>\n{question}\n</question>"
@@ -127,7 +133,8 @@ def ask(question, k=4, explain=True, schema="lean", fk_hints=True, strict=False,
         try:
             result["explanation"] = llm.complete(EXPLAIN_SYSTEM, msg).strip()
         except Exception as e:
-            result["explanation"] = f"(explanation unavailable: {e})"
+            print(f"explanation failed: {e}", file=sys.stderr)  # details stay server-side
+            result["explanation"] = "(explanation unavailable)"
     return result
 
 

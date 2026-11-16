@@ -4,8 +4,9 @@ import json
 import os
 import random
 import sqlite3
-import time
 import sys
+import threading
+import time
 from abc import ABC, abstractmethod
 
 import requests
@@ -75,14 +76,17 @@ class GroqProvider(LLMProvider):
 
 
 class CachedLLM:
-    """Wraps a provider with an on-disk cache and retry/backoff."""
+    """Wraps a provider with an on-disk cache and retry/backoff. Safe to share between threads."""
 
     def __init__(self, provider, cache_path=CACHE_PATH, max_retries=5):
         self.provider = provider
         self.max_retries = max_retries
         self.hits = 0
         self.misses = 0
-        self.db = sqlite3.connect(cache_path)
+        self._lock = threading.Lock()
+        # check_same_thread=False: web servers handle requests in worker threads; self._lock
+        # makes sure only one thread touches the connection at a time.
+        self.db = sqlite3.connect(cache_path, check_same_thread=False)
         self.db.execute("CREATE TABLE IF NOT EXISTS cache "
                         "(key TEXT PRIMARY KEY, response TEXT, created REAL)")
 
@@ -93,15 +97,17 @@ class CachedLLM:
 
     def complete(self, system, user):
         key = self._key(system, user)
-        row = self.db.execute("SELECT response FROM cache WHERE key=?", (key,)).fetchone()
-        if row:
-            self.hits += 1
-            return row[0]
+        with self._lock:
+            row = self.db.execute("SELECT response FROM cache WHERE key=?", (key,)).fetchone()
+            if row:
+                self.hits += 1
+                return row[0]
         text = self._call_with_retry(system, user)
-        self.db.execute("INSERT OR REPLACE INTO cache VALUES (?,?,?)",
-                        (key, text, time.time()))
-        self.db.commit()
-        self.misses += 1
+        with self._lock:
+            self.db.execute("INSERT OR REPLACE INTO cache VALUES (?,?,?)",
+                            (key, text, time.time()))
+            self.db.commit()
+            self.misses += 1
         return text
 
     def _call_with_retry(self, system, user):

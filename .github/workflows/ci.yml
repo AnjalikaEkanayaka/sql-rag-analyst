@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Run tests
+        run: python -m pytest -q --cov=src --cov-report=term-missing
+
+  docker:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - uses: actions/checkout@v6
+      - name: Build image
+        run: docker build -t sql-rag-analyst .
+      - name: Smoke test the container
+        run: |
+          docker run -d --name app -p 8000:8000 sql-rag-analyst
+          for i in $(seq 1 60); do
+            if curl -fs localhost:8000/health; then break; fi
+            sleep 2
+          done
+          curl -fs localhost:8000/health
+          curl -fs "localhost:8000/schema?question=customers%20per%20country&k=3" | grep -q '"Customer"'
+          code=$(curl -s -o /dev/null -w "%{http_code}" -X POST localhost:8000/ask -H 'content-type: application/json' -d '{"question":"hi"}')
+          test "$code" = "422"
+      - name: Show container logs on failure
+        if: failure()
+        run: docker logs app

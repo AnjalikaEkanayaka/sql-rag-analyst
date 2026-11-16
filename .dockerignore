@@ -1,0 +1,17 @@
+.git
+.github
+.venv
+__pycache__
+*.pyc
+.pytest_cache
+.coverage
+.env
+chroma_db
+models_cache
+logs
+llm_cache.sqlite
+tests
+eval
+scripts
+README.md
+PROGRESS.md
