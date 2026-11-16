@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SQL + RAG Analyst</title>
+<style>
+  :root { --bg:#fff; --fg:#1d2433; --muted:#5b6475; --card:#f4f6fa; --line:#d9deea; --accent:#2457d6;
+          --ok:#14793a; --bad:#b3261e; --code:#eef1f7; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#12151c; --fg:#e7eaf2; --muted:#9aa3b5; --card:#1b2030; --line:#2c3347; --accent:#7ba2ff;
+            --ok:#5fd18a; --bad:#ff8a80; --code:#0d1017; } }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--fg); font:16px/1.55 system-ui, sans-serif; }
+  header, main { max-width: 880px; margin: 0 auto; padding: 0 20px; }
+  header { padding-top: 40px; }
+  h1 { font-size: 2rem; margin: 0 0 6px; }
+  h2 { font-size: 1.3rem; margin: 40px 0 10px; }
+  .lead { font-size: 1.1rem; color: var(--muted); margin-top: 0; }
+  a { color: var(--accent); }
+  .note { background: var(--card); border-left: 4px solid var(--accent); padding: 12px 16px; border-radius: 6px; }
+  .flow { display: flex; flex-wrap: wrap; gap: 8px; align-items: stretch; margin: 14px 0; }
+  .step { flex: 1 1 150px; background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; }
+  .step b { display: block; margin-bottom: 2px; }
+  .step small { color: var(--muted); }
+  .arrow { align-self: center; color: var(--muted); font-size: 1.4rem; }
+  #buttons { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+  #buttons button { text-align: left; background: var(--card); color: var(--fg); border: 1px solid var(--line);
+                    border-radius: 8px; padding: 8px 12px; font: inherit; cursor: pointer; }
+  #buttons button[aria-pressed="true"] { border-color: var(--accent); outline: 2px solid var(--accent); }
+  #panel { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; }
+  .badge { display: inline-block; font-weight: 600; border-radius: 999px; padding: 2px 12px; font-size: .9rem; border: 1px solid; }
+  .badge.ok { color: var(--ok); } .badge.bad { color: var(--bad); }
+  pre { background: var(--code); border-radius: 8px; padding: 10px 12px; overflow-x: auto; margin: 6px 0 12px;
+        font: .85rem/1.45 ui-monospace, Consolas, monospace; white-space: pre-wrap; word-break: break-word; }
+  .label { color: var(--muted); font-size: .85rem; text-transform: uppercase; letter-spacing: .04em; margin-top: 12px; }
+  .scroll { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; font-size: .9rem; }
+  th, td { border-bottom: 1px solid var(--line); padding: 5px 8px; text-align: left; white-space: nowrap; }
+  td.wrap { white-space: normal; min-width: 220px; }
+  th { color: var(--muted); font-weight: 600; }
+  ul { padding-left: 20px; } li { margin: 4px 0; }
+  footer { max-width: 880px; margin: 40px auto; padding: 0 20px; color: var(--muted); font-size: .9rem; }
+</style>
+</head>
+<body>
+<header>
+  <h1>SQL + RAG Analyst</h1>
+  <p class="lead">Ask a plain-English question about a database. The system finds the relevant tables, has an LLM write read-only SQL, validates it with a parser-based guard, runs it, and explains the result.</p>
+  <p><a href="https://github.com/AnjalikaEkanayaka/sql-rag-analyst">Source code on GitHub</a> &middot; <span id="video">Demo video: coming soon</span></p>
+</header>
+<main>
+  <section>
+    <h2>About this page</h2>
+    <p class="note">There is no live backend here, on purpose. The project needs a Python server and a rate-limited free LLM API, and Hugging Face now requires a paid plan to create Docker Spaces. So this page shows <b>real recorded outputs</b> from the pipeline, each one checked automatically against a verified answer. You can run the live system yourself in a few commands (bottom of the page).</p>
+  </section>
+
+  <section id="how">
+    <h2>How it works</h2>
+    <div class="flow">
+      <div class="step"><b>1. Retrieve</b><small>RAG over a data dictionary: embeddings pick the relevant tables</small></div>
+      <div class="arrow" aria-hidden="true">&rarr;</div>
+      <div class="step"><b>2. Generate</b><small>An LLM writes one SQLite SELECT from those tables</small></div>
+      <div class="arrow" aria-hidden="true">&rarr;</div>
+      <div class="step"><b>3. Guard &amp; run</b><small>sqlglot validation, read-only connection, row cap, timeout, logging</small></div>
+      <div class="arrow" aria-hidden="true">&rarr;</div>
+      <div class="step"><b>4. Explain</b><small>A short plain-English answer next to the SQL</small></div>
+    </div>
+    <p>The same pipeline is exposed as an MCP server (for AI agents) and a FastAPI service, and evaluated on 40 questions with verified gold SQL.</p>
+  </section>
+
+  <section id="examples">
+    <h2>Recorded examples</h2>
+    <p>Pick a question. Each answer was produced by the real pipeline and compared with the verified result. One of them is a known failure, kept on purpose.</p>
+    <div id="buttons" role="group" aria-label="Example questions"></div>
+    <div id="panel" aria-live="polite"></div>
+    <p id="meta" class="label"></p>
+  </section>
+
+  <section id="results">
+    <h2>Evaluation results</h2>
+    <p>40 questions. <b>Hit-all@k</b> is the share of questions where every needed table was retrieved. One question is worth 2.5 points, so small differences are noise. Unrestricted runs may use tables outside the retrieved set; the strict runs allow only retrieved tables.</p>
+    <div class="label">Retrieval only</div>
+    <div class="scroll" id="t-retrieval"></div>
+    <div class="label">End to end (execution accuracy = same result as the gold SQL)</div>
+    <div class="scroll" id="t-e2e"></div>
+  </section>
+
+  <section id="safety">
+    <h2>Safety design</h2>
+    <ul>
+      <li>The SQL is parsed with sqlglot: exactly one SELECT, nothing else (no INSERT, UPDATE, DELETE, DROP, ALTER, PRAGMA, ATTACH).</li>
+      <li>Only known tables; dangerous functions blocked; system tables and table-valued functions rejected.</li>
+      <li>A LIMIT is enforced, with a timeout and a row cap; the database is opened read-only.</li>
+      <li>The question is treated as data, never as instructions; every query is logged.</li>
+      <li>Around 30 attack cases and the rest of the guard are covered by automated tests.</li>
+    </ul>
+  </section>
+
+  <section id="limits">
+    <h2>Limitations</h2>
+    <ul>
+      <li>Chinook is small (11 tables) and public. The unrestricted accuracy partly came from table names that the prompt's foreign-key lines revealed, so the strict numbers are the conservative ones.</li>
+      <li>Most failures were retrieval misses: tables mentioned only through values ("Jazz", "AC/DC") or actions ("bought").</li>
+      <li>Generated SQL can be wrong without any error. Always read the SQL shown next to an answer.</li>
+      <li>No authentication or rate limiting yet, so it is not meant to be exposed publicly as is.</li>
+    </ul>
+  </section>
+
+  <section id="run">
+    <h2>Run it yourself</h2>
+    <pre>git clone https://github.com/AnjalikaEkanayaka/sql-rag-analyst
+cd sql-rag-analyst
+python -m venv .venv &amp;&amp; .venv/Scripts/activate      # Linux/macOS: source .venv/bin/activate
+pip install -r requirements.txt
+# put GROQ_API_KEY=... in a .env file (free key from console.groq.com)
+python -m src.retrieval build
+python -m uvicorn src.api:app --port 8000               # open http://localhost:8000/docs</pre>
+  </section>
+</main>
+<footer>Built by Anjalika Ekanayaka. Examples above were generated from the real pipeline and are static.</footer>
+
+<script src="data.js"></script>
+<script>
+(function () {
+  const D = window.DEMO || { examples: [], results: [] };
+  const $ = (id) => document.getElementById(id);
+  function el(tag, text, cls) {
+    const e = document.createElement(tag);
+    if (text !== undefined && text !== null) e.textContent = text;
+    if (cls) e.className = cls;
+    return e;
+  }
+  function cell(v) { return v === null || v === undefined ? "NULL" : String(v); }
+  function table(columns, rows, wrapLast) {
+    const t = el("table"), head = el("thead"), hr = el("tr");
+    columns.forEach((c) => hr.appendChild(el("th", c)));
+    head.appendChild(hr); t.appendChild(head);
+    const body = el("tbody");
+    rows.forEach((r) => {
+      const tr = el("tr");
+      r.forEach((v, i) => tr.appendChild(el("td", cell(v), wrapLast && i === r.length - 1 ? "wrap" : "")));
+      body.appendChild(tr);
+    });
+    t.appendChild(body);
+    return t;
+  }
+  const BADGES = {
+    correct: ["ok", "\u2713 Matches the verified answer"],
+    wrong_result: ["bad", "\u2717 Different from the verified answer"],
+    empty_result: ["bad", "\u2717 Returned no rows"],
+    blocked: ["bad", "\u2717 Blocked by the safety guard"],
+    exec_error: ["bad", "\u2717 The SQL failed to run"],
+  };
+  function section(panel, label, node) { panel.appendChild(el("div", label, "label")); panel.appendChild(node); }
+
+  function show(ex, button) {
+    document.querySelectorAll("#buttons button").forEach((b) => b.setAttribute("aria-pressed", String(b === button)));
+    const panel = $("panel");
+    panel.replaceChildren();
+    const [cls, text] = BADGES[ex.status] || ["bad", ex.status];
+    panel.appendChild(el("span", text, "badge " + cls));
+    panel.appendChild(el("p", ex.question));
+    if (ex.explanation) section(panel, "Explanation", el("p", ex.explanation));
+    section(panel, "Tables the model was given", el("p", (ex.tables || []).join(", ")));
+    section(panel, "SQL that ran", el("pre", ex.sql || "(none)"));
+    if (ex.error) section(panel, "Error", el("pre", ex.error));
+    if (ex.columns && ex.columns.length) {
+      const shown = ex.rows.length < ex.row_count ? ` (first ${ex.rows.length} of ${ex.row_count} rows)` : ` (${ex.row_count} rows)`;
+      const wrap = el("div", undefined, "scroll");
+      wrap.appendChild(table(ex.columns, ex.rows));
+      section(panel, "Result" + shown, wrap);
+    }
+    if (ex.status !== "correct") {
+      section(panel, "Reference SQL (verified)", el("pre", ex.gold_sql));
+      section(panel, "Tables the reference query needs", el("p", (ex.gold_tables || []).join(", ")));
+    }
+  }
+
+  const box = $("buttons");
+  D.examples.forEach((ex, i) => {
+    const b = el("button", `#${ex.id} (${ex.difficulty}) ${ex.question}`);
+    b.type = "button";
+    b.setAttribute("aria-pressed", "false");
+    b.addEventListener("click", () => show(ex, b));
+    box.appendChild(b);
+    if (i === 0) show(ex, b);
+  });
+  if (D.model) $("meta").textContent = `Recorded with ${D.model}; ${D.settings || ""}`;
+
+  const retrieval = D.results.filter((r) => r.exec_acc === "-");
+  const e2e = D.results.filter((r) => r.exec_acc !== "-");
+  $("t-retrieval").appendChild(table(["Experiment", "k", "Recall@k", "Hit-all@k", "MRR", "Notes"],
+    retrieval.map((r) => [r.name, r.k, r.recall, r.hit_all, r.mrr, r.notes]), true));
+  $("t-e2e").appendChild(table(["Experiment", "k", "Hit-all@k", "Exec acc", "Easy", "Medium", "Hard", "Notes"],
+    e2e.map((r) => [r.name, r.k, r.hit_all, r.exec_acc, r.easy, r.medium, r.hard, r.notes]), true));
+})();
+</script>
+</body>
+</html>

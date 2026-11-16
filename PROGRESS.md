@@ -133,6 +133,14 @@
 - Live-client findings (gpt-oss-20b, 6 prompts, 1 run each): sensible tool choice (ask_database for simple questions, get_schema for structure); on best-selling-artist the agent left ask_database (retrieval missed InvoiceLine) and did get_schema + run_query: Iron Maiden $138.60, verified correct (U2 second, 105.93); the model refused the delete and sqlite_master prompts itself, so the guard was not exercised live (covered by pytest)
 - Caveats: qualitative, one model, one run; descriptions should be clear, not tuned to one model
 
+## Day 10 - DONE: API, tests, CI
+- src/api.py (FastAPI): GET /health (200 only when DB, dictionary and index exist, else 503), GET /schema?question&k, POST /ask; pydantic validation (question 3-500 chars trimmed, k 1..11); failure mapping: GuardError/QueryError -> 422 with message + SQL, LLMError -> 503 (provider details hidden), anything else -> 500 generic; one lock serializes model/vector-store use; WARMUP=1 preloads the embedding model; STRICT_TABLES env
+- Bugs found by testing: CachedLLM SQLite connection was thread-bound (fixed: check_same_thread=False + lock); missing API key raised instead of returning an LLM error (pipeline now returns it); provider error text (org ids) must not reach clients (API + explanation field); pip freeze on Windows contains Windows-only packages (requirements.txt is now direct pinned deps, requirements.lock.txt is the full freeze)
+- Tests added: test_llm (cache, retry/backoff, quota, threads, Groq mocks), test_pipeline, test_retrieval (no model needed), test_eval (harness + benchmark integrity: 40 gold queries pass the guard, tables known, few-shot examples do not overlap the benchmark), test_api
+- Total tests: <fill in>; coverage: <fill in real number>
+- CI: .github/workflows/ci.yml (actions/checkout@v6, setup-python@v6): test job + docker job (build, health, real /schema retrieval, 422 on bad input); Dockerfile bakes embedding model + index, runs as uid 1000 (HF Spaces); .dockerignore excludes .env
+- Limitations for README: single process, requests serialized; no auth or rate limiting (consider for the public demo); retrieval/dense path untested in CI (needs the model)
+
 ## CV-ready facts
 - SQLite/Chinook: 11 tables, 64 columns documented in a hybrid auto + manual data dictionary
 - RAG over a schema dictionary: 28 chunks, bge-small ONNX embeddings, ChromaDB; finding: embedding-only retrieval misses join-bridge tables
