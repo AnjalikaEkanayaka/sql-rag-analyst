@@ -141,6 +141,20 @@
 - CI: .github/workflows/ci.yml (actions/checkout@v6, setup-python@v6): test job + docker job (build, health, real /schema retrieval, 422 on bad input); Dockerfile bakes embedding model + index, runs as uid 1000 (HF Spaces); .dockerignore excludes .env
 - Limitations for README: single process, requests serialized; no auth or rate limiting (consider for the public demo); retrieval/dense path untested in CI (needs the model)
 
+## Day 11 - DONE (adapted): demo page + README
+- FINDING: Hugging Face docs (spaces-overview, checked this session) say Docker and Gradio Spaces require a paid plan to create (PRO for personal accounts); only Static Spaces are free (plus 2 ZeroGPU Gradio Spaces). A free Docker Space is no longer possible, so no live backend.
+- Decision: static demo on GitHub Pages (/docs, free for public repos) with REAL recorded pipeline outputs on 8 benchmark questions, each auto-marked correct/incorrect against the verified gold SQL (including known failure #39); results tables parsed from eval/results.md
+- scripts/make_demo_data.py generates docs/data.js; docs/index.html is dependency-free and inserts all data with textContent (tested with hostile data in jsdom); tests/test_demo_data.py
+- README.md: pitch, Mermaid architecture, quick start, safety design table, evaluation method and results, findings, tests/CI, limitations, future work, process note
+- Dockerfile + CI remain (container smoke-tested in CI); a paid plan would allow sdk: docker, app_port: 8000 and a GROQ_API_KEY Space secret; add rate limiting before exposing publicly (not built)
+- Untested: real browsers/phone, Pages deployment, Mermaid rendering
+
+## Day 12 - cleanup, CV, post, interview practice
+- Secret scan clean; obsolete scripts removed; dataset credited; fresh-clone test passed; tag v1.0.0 (optional)
+- CV bullets/summary/skills added; LinkedIn post drafted/published: <date>
+- Interview practice: 10 questions practiced; mock interview with assistant: <done/not done>
+- Remaining optional ideas: value-based schema linking; rate limiting + paid-plan hosting; larger private-style schema test
+
 ## CV-ready facts
 - SQLite/Chinook: 11 tables, 64 columns documented in a hybrid auto + manual data dictionary
 - RAG over a schema dictionary: 28 chunks, bge-small ONNX embeddings, ChromaDB; finding: embedding-only retrieval misses join-bridge tables

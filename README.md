@@ -134,6 +134,8 @@ Value-based schema linking (index distinct values of low-cardinality columns), a
 | `docs/` | the static demo page |
 | `tests/` | the test suite |
 
+Sample data: the Chinook database (github.com/lerocha/chinook-database). Check its license before redistributing.
+
 ## Process
 
 Built over 12 days as a learning project, working with an AI pair-programming assistant (Claude). All numbers come from runs on my own machine, including the poor ones.
